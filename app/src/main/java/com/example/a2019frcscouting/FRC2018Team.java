@@ -1,9 +1,10 @@
 package com.example.a2019frcscouting;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Set;
 
-public class FRC2018Team {
+public class FRC2018Team implements Serializable {
 
     private int teamNum;
     private boolean climb;

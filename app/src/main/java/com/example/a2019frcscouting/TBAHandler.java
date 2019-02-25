@@ -19,8 +19,8 @@ import java.util.Map;
 public class TBAHandler {
 
     private static final String baseURL = "https://www.thebluealliance.com/api/v3";
-    private static final String eventKey = "2019mndu";
-    private static final int currentYear = 2019;
+    private static final String eventKey = "2018mndu";
+    private static final int currentYear = 2018;
     public static JSONObject json;
     private RequestQueue queue;
     public static DBHelper helper; //This helper can be accessed statically by any class.
@@ -45,7 +45,7 @@ public class TBAHandler {
             public void onErrorResponse(VolleyError error) {
             Log.d("minto", "Json Request encountered error");
             error.printStackTrace();
-            Log.v("minto", error.getMessage());
+            Log.v("minto", error.getMessage() + "");
             }
         });
 
