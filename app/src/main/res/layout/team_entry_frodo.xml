@@ -12,50 +12,11 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
-        android:id="@+id/TelePointsText"
+        android:id="@+id/statText"
         android:layout_width="50dp"
         android:layout_height="40dp"
         android:layout_marginLeft="10dp"
         android:text="TeleopPoints"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <TextView
-        android:id="@+id/ClimbText"
-        android:layout_width="50dp"
-        android:layout_height="30dp"
-        android:layout_marginLeft="10dp"
-        android:text="Climb"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/AutoPointsText"
-        android:layout_width="40dp"
-        android:layout_height="20dp"
-        android:layout_marginLeft="10dp"
-        android:text="Auto Points"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/VaultPointsText"
-        android:layout_width="40dp"
-        android:layout_height="20dp"
-        android:layout_marginLeft="10dp"
-        android:text="Vault Points"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/AutoRunText"
-        android:layout_width="50dp"
-        android:layout_height="20dp"
-        android:layout_marginLeft="10dp"
-        android:text="Auto Run"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/MatchesPlayedText"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginLeft="10dp"
-        android:text="Matches Played"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
 </LinearLayout>

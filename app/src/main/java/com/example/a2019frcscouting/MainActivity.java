@@ -13,27 +13,33 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 /*
 TODO // IMPROVE RESPONSIVENESS!!!!!!!
 TODO // or not, I mean only you and Raf will probably use the app a lot
-TODO //
-TODO // Sorting by different values
+TODO // Finish team info page
+TODO // Sorting by different values //DONE
 TODO // settings page
-TODO //
+TODO // Replace for 2019 data
  */
 
-public class MainActivity extends FragmentActivity implements ListFragment.OnFragmentInteractionListener {
+public class MainActivity extends FragmentActivity implements ListFragment.OnFragmentInteractionListener, SettingsFragment.OnFragmentInteractionListener, AdapterView.OnItemSelectedListener {
     public static Context c; // Static context that can be accessed from other classes
     private static int currentMatch = 1;
-    FragmentManager manager = this.getSupportFragmentManager();
     //public com.example.cameron.sql_testing.DatabaseContainer container = new DatabaseContainer(this);
     Button button;
     static TBAHandler handler;
     static ListView list;
-    SharedPreferences sharedPref;
+    public static SharedPreferences sharedPref;
+    public static String TBAKey;
+    public static Spinner sortSpinner;
+    public static ArrayAdapter<CharSequence> adap;
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -56,6 +62,10 @@ public class MainActivity extends FragmentActivity implements ListFragment.OnFra
                     //mTextMessage.setText(R.string.title_dashboard);
                     return true;
                 case R.id.navigation_notifications:
+                    fragment = new SettingsFragment();
+                    transaction = getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.settingsFrameLayout, fragment);
+                    transaction.commit();
                     //mTextMessage.setText(R.string.title_notifications);
                     return true;
             }
@@ -80,9 +90,14 @@ public class MainActivity extends FragmentActivity implements ListFragment.OnFra
         button = findViewById(R.id.button);
         list = findViewById(R.id.listMain);
         handler = new TBAHandler(this);
+        TBAKey = sharedPref.getString(getString(R.string.settings_key_key), "yeet");
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        sortSpinner = findViewById(R.id.sortSpinner);
+        adap = ArrayAdapter.createFromResource(this, R.array.sort_array, android.R.layout.simple_spinner_item);
+        adap.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        sortSpinner.setAdapter(adap);
 
         //handler.getMatchData(String.format("/match/%1$s_qm%2$d", "2018_mndu", 1));
         //Log.v("minto", handler.helper.getAllEntries());
@@ -100,19 +115,34 @@ public class MainActivity extends FragmentActivity implements ListFragment.OnFra
 //            handler.getMatchData(String.format("/match/%1$s_qm%2$d", "2018mndu", i));
 //        }
 
-//        FrodoCursorAdapter todoAdapter = new FrodoCursorAdapter(this, TBAHandler.helper.getAllEntriesCursor());
+//        FrodoCursorAdapter todoAdapter = new FrodoCursorAdapter(this, TBAHandler.helper.getAllEntriesTeamCursor());
 //        list.setAdapter(todoAdapter);
     }
 
     @Override
     public void onFragmentInteraction(Uri uri) {}
 
-    public void startTeamInfoFragment(SQLiteCursor cursor) {
-        TeamInfoFragment fragment = new TeamInfoFragment();
-        fragment.setThing(cursor);
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.teamFrameLayout, fragment);
-        transaction.commit();
+    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+        FrodoCursorAdapter todoAdapter;
+        switch(pos) {
+            case 0:
+                todoAdapter = new FrodoCursorAdapter(MainActivity.c, TBAHandler.helper.getAllEntriesTeamCursor(), "team");
+                MainActivity.list.setAdapter(todoAdapter);
+                break;
+            case 1:
+                todoAdapter = new FrodoCursorAdapter(MainActivity.c, TBAHandler.helper.getAllEntriesTeamCursor(), "teleop");
+                MainActivity.list.setAdapter(todoAdapter);
+                break;
+            case 2:
+                break;
+        }
+        // An item was selected. You can retrieve the selected item using
+        // parent.getItemAtPosition(pos)
+    }
+
+    public void onNothingSelected(AdapterView<?> parent) {
+        FrodoCursorAdapter todoAdapter = new FrodoCursorAdapter(MainActivity.c, TBAHandler.helper.getAllEntriesTeamCursor(), "team");
+        MainActivity.list.setAdapter(todoAdapter);
     }
 
 }

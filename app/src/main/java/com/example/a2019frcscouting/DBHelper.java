@@ -180,10 +180,25 @@ public class DBHelper extends SQLiteOpenHelper {
         return returnString;
     }
 
-    public Cursor getAllEntriesCursor() {
+    public Cursor getAllEntriesTeamCursor() {
         SQLiteDatabase db = this .getWritableDatabase();
         Cursor cursor;
         cursor = db.rawQuery("SELECT * FROM " + SQL_TABLE_NAME + ";", null);
+        return cursor;
+    }
+
+    public Cursor getAllEntriesTeleopCursor() {
+        SQLiteDatabase db = this .getWritableDatabase();
+        Cursor cursor;
+        cursor = db.rawQuery("SELECT * FROM " + SQL_TABLE_NAME + " ORDER BY teleopPoints DESC" + ";", null);
+
+        return cursor;
+    }
+
+    public Cursor getAllEntriesAutoCursor() {
+        SQLiteDatabase db = this .getWritableDatabase();
+        Cursor cursor;
+        cursor = db.rawQuery("SELECT * FROM " + SQL_TABLE_NAME + " ORDER BY autoPoints DESC" + ";", null);
 
         return cursor;
     }

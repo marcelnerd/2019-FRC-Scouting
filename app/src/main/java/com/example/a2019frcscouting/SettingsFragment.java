@@ -1,40 +1,42 @@
 package com.example.a2019frcscouting;
 
 import android.content.Context;
-import android.content.Intent;
-import android.database.sqlite.SQLiteCursor;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-
-import static com.example.a2019frcscouting.MainActivity.handler;
+import android.widget.Button;
+import android.widget.EditText;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link ListFragment.OnFragmentInteractionListener} interface
+ * {@link SettingsFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link ListFragment#newInstance} factory method to
+ * Use the {@link SettingsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ListFragment extends Fragment {
+public class SettingsFragment extends Fragment {
+    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-
+    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
-    public ListFragment() {
+    EditText keyText;
+    Button applyButton;
+    SharedPreferences.Editor editor;
+
+    public SettingsFragment() {
         // Required empty public constructor
     }
 
@@ -42,19 +44,18 @@ public class ListFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     *
-     * @return A new instance of fragment ListFragment.
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment SettingsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ListFragment newInstance() {
-        ListFragment fragment = new ListFragment();
+    public static SettingsFragment newInstance(String param1, String param2) {
+        SettingsFragment fragment = new SettingsFragment();
         Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    public void setOnFragmentInteractionListener(FragmentActivity activity) {
-        mListener = (OnFragmentInteractionListener) activity;
     }
 
     @Override
@@ -64,26 +65,31 @@ public class ListFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        editor = MainActivity.sharedPref.edit();
+        keyText = getActivity().findViewById(R.id.tbaKeyText);
+        applyButton = getActivity().findViewById(R.id.keyApplyButton);
+
+        applyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editor.putString(getString(R.string.settings_key_key), keyText.getText().toString());
+                editor.apply();
+            }
+        });
+
+        if(!MainActivity.sharedPref.getString(getString(R.string.settings_key_key), "yeet").equals("yeet")) {
+            keyText.setText(MainActivity.sharedPref.getString(getString(R.string.settings_key_key), "yeet"));
+        }
+
+        editor.putString(getString(R.string.settings_key_key), "YXwa7Fm6N0mks7XhnRMIVnJzsjE3frXe30GZAMp5r3rDmhdLFcZjsFkFTpxxRUtR");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
-        MainActivity.list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //(new MainActivity()).startTeamInfoFragment((SQLiteCursor) parent.getItemAtPosition(position));
-                SQLiteCursor cursor = (SQLiteCursor) parent.getItemAtPosition(position);
-                Intent intent = new Intent(MainActivity.c, TeamInfoActivity.class);
-
-                intent.putExtra("teamNum", Integer.toString(cursor.getInt(0)));
-                startActivity(intent);
-
-            }
-        });
-        return inflater.inflate(R.layout.fragment_list, container, false);
+        return inflater.inflate(R.layout.fragment_settings, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -101,9 +107,6 @@ public class ListFragment extends Fragment {
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
-        }
-        for (int i = 1; i < 100; i++) {
-            handler.getMatchData(String.format("/match/%1$s_qm%2$d", "2018mndu", i));
         }
     }
 

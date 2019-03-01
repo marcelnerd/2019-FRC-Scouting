@@ -1,7 +1,9 @@
 package com.example.a2019frcscouting;
 
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,8 +11,12 @@ import android.widget.CursorAdapter;
 import android.widget.TextView;
 
 public class FrodoCursorAdapter extends CursorAdapter {
-    public FrodoCursorAdapter(Context context, Cursor cursor) {
+
+    String sortOption;
+
+    public FrodoCursorAdapter(Context context, Cursor cursor, String s) {
         super(context, cursor, 0);
+        sortOption = s;
     }
 
     // The newView method is used to inflate a new view and return it,
@@ -26,13 +32,23 @@ public class FrodoCursorAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         // Find fields to populate in inflated template
         TextView teamNumText = view.findViewById(R.id.TeamNumText);
-        TextView telePointsText = view.findViewById(R.id.TelePointsText);
-        TextView autoPointsText = view.findViewById(R.id.AutoPointsText);
-        TextView climbText = view.findViewById(R.id.ClimbText);
-        TextView vaultPointsText = view.findViewById(R.id.VaultPointsText);
-        TextView autoRunText = view.findViewById(R.id.AutoRunText);
-        TextView matchesText = view.findViewById(R.id.MatchesPlayedText);
+        TextView statText = view.findViewById(R.id.statText);
 
+        switch(sortOption) {
+            case "teleop":
+                statText.setText(cursor.getString(cursor.getColumnIndex("teleopPoints")).toString());
+            //TODO MORE OPTIONS!!!!!!!!!!!
+        }
+
+        /*telePointsText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.list.setAdapter(new FrodoCursorAdapter(MainActivity.c, TBAHandler.helper.getAllEntriesTeleopCursor(), sortOption));
+                Log.v("minto", "clicked thing");
+            }
+        });*/
+
+        /*
         // Extract properties from cursor
         String teamNum = cursor.getString(cursor.getColumnIndex("_id")).toString();
         String teleopPoints = cursor.getString(cursor.getColumnIndex("teleopPoints")).toString();
@@ -50,5 +66,6 @@ public class FrodoCursorAdapter extends CursorAdapter {
         vaultPointsText.setText(vaultPoints);
         autoRunText.setText(autoRun);
         matchesText.setText(matchesPlayed);
+        */
     }
 }

@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
-public class TeamInfoActivity extends AppCompatActivity { //TODO START // Team info activity works; figure out possible drop-down for team info, figure out sorting by different values
+public class TeamInfoActivity extends AppCompatActivity {
 
     TextView text;
 
