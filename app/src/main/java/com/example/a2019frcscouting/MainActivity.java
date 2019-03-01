@@ -83,6 +83,8 @@ public class MainActivity extends FragmentActivity implements ListFragment.OnFra
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Fragment fragment;
+        FragmentTransaction transaction;
         c = getBaseContext();
         super.onCreate(savedInstanceState);
         sharedPref = this.getPreferences(Context.MODE_PRIVATE);
@@ -98,6 +100,37 @@ public class MainActivity extends FragmentActivity implements ListFragment.OnFra
         adap = ArrayAdapter.createFromResource(this, R.array.sort_array, android.R.layout.simple_spinner_item);
         adap.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         sortSpinner.setAdapter(adap);
+        sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                FrodoCursorAdapter todoAdapter;
+                switch(position) {
+                    case 0:
+                        todoAdapter = new FrodoCursorAdapter(MainActivity.c, TBAHandler.helper.getAllEntriesTeamCursor(), "team");
+                        MainActivity.list.setAdapter(todoAdapter);
+                        break;
+                    case 1:
+                        todoAdapter = new FrodoCursorAdapter(MainActivity.c, TBAHandler.helper.getAllEntriesTeleopCursor(), "teleop");
+                        MainActivity.list.setAdapter(todoAdapter);
+                        break;
+                    case 2:
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                FrodoCursorAdapter todoAdapter = new FrodoCursorAdapter(MainActivity.c, TBAHandler.helper.getAllEntriesTeamCursor(), "team");
+                MainActivity.list.setAdapter(todoAdapter);
+            }
+        });
+
+        fragment = new ListFragment();
+        transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.listFrameLayout, fragment);
+        transaction.commit();
+
+
 
         //handler.getMatchData(String.format("/match/%1$s_qm%2$d", "2018_mndu", 1));
         //Log.v("minto", handler.helper.getAllEntries());
@@ -123,6 +156,7 @@ public class MainActivity extends FragmentActivity implements ListFragment.OnFra
     public void onFragmentInteraction(Uri uri) {}
 
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+
         FrodoCursorAdapter todoAdapter;
         switch(pos) {
             case 0:
@@ -130,7 +164,7 @@ public class MainActivity extends FragmentActivity implements ListFragment.OnFra
                 MainActivity.list.setAdapter(todoAdapter);
                 break;
             case 1:
-                todoAdapter = new FrodoCursorAdapter(MainActivity.c, TBAHandler.helper.getAllEntriesTeamCursor(), "teleop");
+                todoAdapter = new FrodoCursorAdapter(MainActivity.c, TBAHandler.helper.getAllEntriesTeleopCursor(), "teleop");
                 MainActivity.list.setAdapter(todoAdapter);
                 break;
             case 2:

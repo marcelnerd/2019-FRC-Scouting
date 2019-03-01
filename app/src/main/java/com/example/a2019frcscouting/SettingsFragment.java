@@ -68,7 +68,7 @@ public class SettingsFragment extends Fragment {
 
         editor = MainActivity.sharedPref.edit();
         keyText = getActivity().findViewById(R.id.tbaKeyText);
-        applyButton = getActivity().findViewById(R.id.keyApplyButton);
+        applyButton = getActivity().findViewById(R.id.keyButton);
 
         applyButton.setOnClickListener(new View.OnClickListener() {
             @Override

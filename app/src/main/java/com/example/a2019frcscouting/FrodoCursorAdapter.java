@@ -37,6 +37,10 @@ public class FrodoCursorAdapter extends CursorAdapter {
         switch(sortOption) {
             case "teleop":
                 statText.setText(cursor.getString(cursor.getColumnIndex("teleopPoints")).toString());
+                break;
+            case "team":
+                statText.setText(cursor.getString(cursor.getColumnIndex("_id")).toString());
+                break;
             //TODO MORE OPTIONS!!!!!!!!!!!
         }
 
