@@ -2,6 +2,7 @@ package com.example.a2019frcscouting;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteCursor;
 import android.net.Uri;
@@ -51,10 +52,12 @@ public class MainActivity extends FragmentActivity implements ListFragment.OnFra
             FragmentTransaction transaction;
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    fragment = new ListFragment();
-                    transaction = getSupportFragmentManager().beginTransaction();
-                    transaction.replace(R.id.listFrameLayout, fragment);
-                    transaction.commit();
+//                    fragment = new ListFragment();
+//                    transaction = getSupportFragmentManager().beginTransaction();
+//                    transaction.replace(R.id.listFrameLayout, fragment);
+//                    transaction.commit(); //TODO FUCK SHIT UP
+                    list.deferNotifyDataSetChanged();
+
                     //mTextMessage.setText(R.string.title_home);
                     return true;
                 case R.id.navigation_dashboard:
@@ -88,7 +91,7 @@ public class MainActivity extends FragmentActivity implements ListFragment.OnFra
         c = getBaseContext();
         super.onCreate(savedInstanceState);
         sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-        setContentView(R.layout.fragment_list);
+        setContentView(R.layout.activity_main);
         button = findViewById(R.id.button);
         list = findViewById(R.id.listMain);
         handler = new TBAHandler(this);
@@ -130,6 +133,23 @@ public class MainActivity extends FragmentActivity implements ListFragment.OnFra
             }
         });
 
+        MainActivity.list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //(new MainActivity()).startTeamInfoFragment((SQLiteCursor) parent.getItemAtPosition(position));
+                SQLiteCursor cursor = (SQLiteCursor) parent.getItemAtPosition(position);
+                Intent intent = new Intent(MainActivity.c, TeamInfoActivity.class);
+
+                intent.putExtra("teamNum", Integer.toString(cursor.getInt(0)));
+                startActivity(intent);
+
+            }
+        });
+
+        for (int i = 1; i < 3; i++) {
+            handler.getMatchData(String.format("/match/%1$s_qm%2$d", "2018mndu", i));
+        }
+
        /* fragment = new ListFragment();
         transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.listFrameLayout, fragment);
@@ -162,26 +182,10 @@ public class MainActivity extends FragmentActivity implements ListFragment.OnFra
 
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 
-        FrodoCursorAdapter todoAdapter;
-        switch(pos) {
-            case 0:
-                todoAdapter = new FrodoCursorAdapter(MainActivity.c, TBAHandler.helper.getAllEntriesTeamCursor(), "team");
-                MainActivity.list.setAdapter(todoAdapter);
-                break;
-            case 1:
-                todoAdapter = new FrodoCursorAdapter(MainActivity.c, TBAHandler.helper.getAllEntriesTeleopCursor(), "teleop");
-                MainActivity.list.setAdapter(todoAdapter);
-                break;
-            case 2:
-                break;
-        }
-        // An item was selected. You can retrieve the selected item using
-        // parent.getItemAtPosition(pos)
     }
 
     public void onNothingSelected(AdapterView<?> parent) {
-        FrodoCursorAdapter todoAdapter = new FrodoCursorAdapter(MainActivity.c, TBAHandler.helper.getAllEntriesTeamCursor(), "team");
-        MainActivity.list.setAdapter(todoAdapter);
+
     }
 
 }
