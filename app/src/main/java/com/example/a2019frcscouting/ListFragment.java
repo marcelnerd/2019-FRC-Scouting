@@ -102,9 +102,9 @@ public class ListFragment extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
-        for (int i = 1; i < 100; i++) {
+        /*for (int i = 1; i < 3; i++) {
             handler.getMatchData(String.format("/match/%1$s_qm%2$d", "2018mndu", i));
-        }
+          } */
     }
 
     @Override

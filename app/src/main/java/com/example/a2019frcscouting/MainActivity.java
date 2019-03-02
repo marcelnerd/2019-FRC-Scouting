@@ -104,10 +104,15 @@ public class MainActivity extends FragmentActivity implements ListFragment.OnFra
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 FrodoCursorAdapter todoAdapter;
+                FragmentManager manager = getSupportFragmentManager();
+                FragmentTransaction transaction = manager.beginTransaction();
                 switch(position) {
                     case 0:
+                        //handler.getMatchData(String.format("/match/%1$s_qm%2$d", "2018mndu", currentMatch));
                         todoAdapter = new FrodoCursorAdapter(MainActivity.c, TBAHandler.helper.getAllEntriesTeamCursor(), "team");
                         MainActivity.list.setAdapter(todoAdapter);
+                        //transaction.replace(R.id.listFrameLayout, new ListFragment());
+                        //transaction.commit();
                         break;
                     case 1:
                         todoAdapter = new FrodoCursorAdapter(MainActivity.c, TBAHandler.helper.getAllEntriesTeleopCursor(), "teleop");
@@ -125,10 +130,10 @@ public class MainActivity extends FragmentActivity implements ListFragment.OnFra
             }
         });
 
-        fragment = new ListFragment();
+       /* fragment = new ListFragment();
         transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.listFrameLayout, fragment);
-        transaction.commit();
+        transaction.commit();*/
 
 
 
