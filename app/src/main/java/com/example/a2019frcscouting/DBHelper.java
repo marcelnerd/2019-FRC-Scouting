@@ -266,6 +266,22 @@ public class DBHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
+    public Cursor getAllEntriesHatchCursor() {
+        SQLiteDatabase db = this .getWritableDatabase();
+        Cursor cursor;
+        cursor = db.rawQuery("SELECT * FROM " + SQL_TABLE_NAME + " ORDER BY hatchPoints DESC" + ";", null);
+
+        return cursor;
+    }
+
+    public Cursor getAllEntriesCargoCursor() {
+        SQLiteDatabase db = this .getWritableDatabase();
+        Cursor cursor;
+        cursor = db.rawQuery("SELECT * FROM " + SQL_TABLE_NAME + " ORDER BY hatchPoints DESC" + ";", null);
+
+        return cursor;
+    }
+
     public ArrayList<FRC2018Team> getAllEntriesList() {
         SQLiteDatabase db = this .getWritableDatabase();
         ArrayList<FRC2018Team> list = new ArrayList<>();

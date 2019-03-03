@@ -29,7 +29,8 @@ TODO // or not, I mean only you and Raf will probably use the app a lot
 TODO // Finish team info page
 TODO // Sorting by different values //DONE
 TODO // settings page
-TODO // Replace for 2019 data
+TODO // Replace for 2019 data //DONE
+TODO //
  */
 
 public class MainActivity extends FragmentActivity implements ListFragment.OnFragmentInteractionListener, SettingsFragment.OnFragmentInteractionListener, AdapterView.OnItemSelectedListener {

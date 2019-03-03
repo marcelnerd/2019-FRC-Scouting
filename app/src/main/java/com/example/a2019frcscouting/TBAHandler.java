@@ -35,6 +35,7 @@ public class TBAHandler {
     public void getMatchData(String call) {
         TBAListener listener = new TBAListener(helper); // The helper is passed to the listner.
         HashMap[] map = null;
+        TBAListener.yeet();
 
         String fullURL = baseURL + call;
         //String fullURL = baseURL + "/match/2018mndu_qm1";

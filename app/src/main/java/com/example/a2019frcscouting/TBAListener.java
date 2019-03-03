@@ -65,15 +65,7 @@ public class TBAListener implements Response.Listener<JSONObject> {
 
     }
 
-    private static void yeet() {
-    }
-
-    public JSONObject getJson() {
-        return json;
-    }
-
-    public boolean hasJson() {
-        return (json != null);
+    public static void yeet() {
     }
 }
 
