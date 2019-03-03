@@ -1,5 +1,7 @@
 package com.example.a2019frcscouting;
 
+import android.database.sqlite.SQLiteCursor;
+
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Set;
@@ -11,6 +13,7 @@ public class FRC2018Team implements Serializable {
     private int autoPoints;
     private boolean autoRun;
     private int teleopPoints;
+    private float autoRunPerc;
     private int vaultPoints;
     private int matchesPlayed;
 
@@ -32,6 +35,15 @@ public class FRC2018Team implements Serializable {
         teleopPoints = tp;
         vaultPoints = vp;
         matchesPlayed = 0;
+    }
+
+    public FRC2018Team (SQLiteCursor cursor) {
+        teamNum = cursor.getInt(0);
+        teleopPoints = cursor.getInt(1);
+        autoPoints = cursor.getInt(2);
+        autoRunPerc = cursor.getInt(3);
+        vaultPoints = cursor.getInt(4);
+
     }
 
 

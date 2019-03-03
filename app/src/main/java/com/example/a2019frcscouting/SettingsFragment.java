@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,7 +69,7 @@ public class SettingsFragment extends Fragment {
 
         editor = MainActivity.sharedPref.edit();
         keyText = getActivity().findViewById(R.id.tbaKeyText);
-        applyButton = getActivity().findViewById(R.id.keyButton);
+        applyButton = getActivity().findViewById(R.id.thingButton);
 
         applyButton.setOnClickListener(new View.OnClickListener() {
             @Override

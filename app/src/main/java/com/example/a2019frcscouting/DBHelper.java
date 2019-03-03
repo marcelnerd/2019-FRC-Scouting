@@ -24,6 +24,8 @@ import java.util.HashMap;
 public class DBHelper extends SQLiteOpenHelper {
 
     private final static String SQL_CREATE_ENTRIES = "CREATE TABLE teams (_id INTEGER PRIMARY KEY, teleopPoints INT, autoPoints INT, autoRun FLOAT, vaultPoints INT, climb FLOAT, matchesPlayed INT);";
+    private final static String SQL_CREATE_ENTRIES_NEW = "CREATE TABLE teams (_id INTEGER PRIMARY KEY, teleopPoints INT, autoPoints INT, cargoPoints INT, hatchPoints INT, matchesPlayed INT);";
+
     private final static String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS teams";
     public final static String SQL_TABLE_NAME = "teams";
     public static String nextMatch;
@@ -41,7 +43,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(SQL_CREATE_ENTRIES);
+        db.execSQL(SQL_CREATE_ENTRIES_NEW);
 //        SQLiteDatabase d = this.getWritableDatabase();
     }
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -82,6 +84,67 @@ public class DBHelper extends SQLiteOpenHelper {
         } catch (IOException e){
         } catch (SQLException e) {
         }
+    }
+
+    public void updateTeamStats(FRC2019Team team) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        int oldTeleop, newTeleop, oldAutoP, newAutoP, oldCargo, newCargo, oldHatch, newHatch, matches;
+
+        //double oldARun, newARun, oldClimb, newClimb;
+
+        int teleop = team.teleopPoints;
+        int _id = team.teamNum;
+        int autoPoints = team.autoPoints;
+        int cargoPoints = team.cargoPoints;
+        int hatchPoints = team.hatchPoints;
+        matches = team.getMatchesPlayed();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + SQL_TABLE_NAME + " WHERE _id=" + _id + ";", null);
+
+        if(cursor.moveToNext()) { // There is already an entry for the team, updates the entry
+
+            Log.d("minto", "updating team " + _id);
+
+            cursor.moveToLast();
+
+            ////****UPDATE MATCHES PLAYED****////
+            matches = cursor.getInt(5);
+            matches++;
+            db.execSQL("UPDATE teams SET matchesPlayed=" + matches + " WHERE _id='" + _id + "';");
+
+            ////****UPDATE TELEOP****////
+            oldTeleop = cursor.getInt(1);
+            newTeleop = oldTeleop + teleop;
+            db.execSQL("UPDATE teams SET teleopPoints='" + newTeleop + "' WHERE _id='" + _id + "';");
+
+            ////****UPDATE AUTO SCORE****////
+            oldAutoP = cursor.getInt(2);
+            newAutoP = autoPoints + oldAutoP;
+            db.execSQL("UPDATE teams SET autoPoints=" + newAutoP + " WHERE _id='" + _id + "';");
+
+            ////****UPDATE CARGO POINTS****////
+            oldCargo = cursor.getInt(3)*(matches-1);
+            newCargo = cargoPoints + oldCargo;
+            db.execSQL("UPDATE teams SET cargoPoints=" + newCargo + " WHERE _id='" + _id + "';");
+
+            ////****UPDATE CLIMB****////
+          /*  matches = cursor.getFloat(5)*(matches-1);
+            newClimb = (oldClimb + climb) / matches;
+            db.execSQL("UPDATE teams SET climb=" + newClimb + " WHERE _id='" + _id + "';");*/
+
+            ////****UPDATE HATCH POINTS****////
+            oldHatch = cursor.getInt(4);
+            newHatch = hatchPoints + oldHatch;
+            db.execSQL("UPDATE teams SET hatchPoints=" + newHatch + " WHERE _id='" + _id + "';");
+
+        }
+        else { //There is not yet an entry for this team, create an entry
+            db.execSQL("INSERT INTO " + SQL_TABLE_NAME + " VALUES (" + _id + ", " + teleop + ", " + autoPoints + ", " + cargoPoints + ", " + hatchPoints + ", " + matches + ");"); //MOST RECENTLELY CHANGED
+            Log.v("minto", "INSERT ONE " + _id);
+        }
+
+        db.close();
     }
 
     public void updateTeamStats(FRC2018Team team) {

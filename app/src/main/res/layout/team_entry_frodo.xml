@@ -6,7 +6,7 @@
 
     <TextView
         android:id="@+id/TeamNumText"
-        android:layout_width="50dp"
+        android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:text="Team Number"
         android:textAppearance="?android:attr/textAppearanceLarge" />

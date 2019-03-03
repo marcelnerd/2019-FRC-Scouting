@@ -34,6 +34,8 @@ public class FrodoCursorAdapter extends CursorAdapter {
         TextView teamNumText = view.findViewById(R.id.TeamNumText);
         TextView statText = view.findViewById(R.id.statText);
 
+        teamNumText.setText(Integer.toString(cursor.getInt(0)));
+
         switch(sortOption) {
             case "teleop":
                 statText.setText(cursor.getString(cursor.getColumnIndex("teleopPoints")).toString());

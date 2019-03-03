@@ -21,6 +21,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import static com.example.a2019frcscouting.TBAHandler.helper;
+
 /*
 TODO // IMPROVE RESPONSIVENESS!!!!!!!
 TODO // or not, I mean only you and Raf will probably use the app a lot
@@ -49,6 +51,7 @@ public class MainActivity extends FragmentActivity implements ListFragment.OnFra
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             Fragment fragment;
+            Intent intent;
             FragmentTransaction transaction;
             switch (item.getItemId()) {
                 case R.id.navigation_home:
@@ -56,7 +59,10 @@ public class MainActivity extends FragmentActivity implements ListFragment.OnFra
 //                    transaction = getSupportFragmentManager().beginTransaction();
 //                    transaction.replace(R.id.listFrameLayout, fragment);
 //                    transaction.commit(); //TODO FUCK SHIT UP
-                    list.deferNotifyDataSetChanged();
+
+                    intent = getIntent();
+                    finish();
+                    startActivity(intent);
 
                     //mTextMessage.setText(R.string.title_home);
                     return true;
@@ -97,6 +103,8 @@ public class MainActivity extends FragmentActivity implements ListFragment.OnFra
         handler = new TBAHandler(this);
         TBAKey = sharedPref.getString(getString(R.string.settings_key_key), "yeet");
 
+        handler.helper.onUpgrade(handler.helper.getWritableDatabase(), 0, 4);
+
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         sortSpinner = findViewById(R.id.sortSpinner);
@@ -112,13 +120,13 @@ public class MainActivity extends FragmentActivity implements ListFragment.OnFra
                 switch(position) {
                     case 0:
                         //handler.getMatchData(String.format("/match/%1$s_qm%2$d", "2018mndu", currentMatch));
-                        todoAdapter = new FrodoCursorAdapter(MainActivity.c, TBAHandler.helper.getAllEntriesTeamCursor(), "team");
+                        todoAdapter = new FrodoCursorAdapter(MainActivity.c, helper.getAllEntriesTeamCursor(), "team");
                         MainActivity.list.setAdapter(todoAdapter);
                         //transaction.replace(R.id.listFrameLayout, new ListFragment());
                         //transaction.commit();
                         break;
                     case 1:
-                        todoAdapter = new FrodoCursorAdapter(MainActivity.c, TBAHandler.helper.getAllEntriesTeleopCursor(), "teleop");
+                        todoAdapter = new FrodoCursorAdapter(MainActivity.c, helper.getAllEntriesTeleopCursor(), "teleop");
                         MainActivity.list.setAdapter(todoAdapter);
                         break;
                     case 2:
@@ -128,7 +136,7 @@ public class MainActivity extends FragmentActivity implements ListFragment.OnFra
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                FrodoCursorAdapter todoAdapter = new FrodoCursorAdapter(MainActivity.c, TBAHandler.helper.getAllEntriesTeamCursor(), "team");
+                FrodoCursorAdapter todoAdapter = new FrodoCursorAdapter(MainActivity.c, helper.getAllEntriesTeamCursor(), "team");
                 MainActivity.list.setAdapter(todoAdapter);
             }
         });
@@ -141,13 +149,17 @@ public class MainActivity extends FragmentActivity implements ListFragment.OnFra
                 Intent intent = new Intent(MainActivity.c, TeamInfoActivity.class);
 
                 intent.putExtra("teamNum", Integer.toString(cursor.getInt(0)));
+                intent.putExtra("teleop", Integer.toString(cursor.getInt(1)));
+                intent.putExtra("cargoPoints", Integer.toString(cursor.getInt(cursor.getColumnIndex("cargoPoints"))));
+                intent.putExtra("hatchPoints", Integer.toString(cursor.getInt(cursor.getColumnIndex("hatchPoints"))));
+                intent.putExtra("autoPoints", Integer.toString(cursor.getInt(cursor.getColumnIndex("autoPoints"))));
                 startActivity(intent);
 
             }
         });
 
-        for (int i = 1; i < 3; i++) {
-            handler.getMatchData(String.format("/match/%1$s_qm%2$d", "2018mndu", i));
+        for (int i = 1; i < 2; i++) {
+            handler.getMatchData(String.format("/match/%1$s_qm%2$d", "2019caoc", i));
         }
 
        /* fragment = new ListFragment();

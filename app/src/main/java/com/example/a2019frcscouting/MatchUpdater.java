@@ -1,5 +1,7 @@
 package com.example.a2019frcscouting;
 
+import android.util.Log;
+
 import org.json.*;
 import java.util.*;
 
@@ -8,7 +10,7 @@ public class MatchUpdater {
     // Arrays containing all the keys of interest
     // This array contains all the keys where the values are the same for each team on the same alliance
     private final static String[] genericKeys = {"teleopScaleOwnershipSec", "autoScaleOwnershipSec", "vaultPoints", "autoSwitchAtZero", "teleopOwnershipPoints", "teleopPoints", "autoOwnershipPoints", "autoPoints", "teleopSwitchOwnershipSec"};
-    private final static String[] tempKeys = {"vaultPoints", "teleopPoints", "autoPoints"};
+    private final static String[] tempKeys = {"cargoPoints", "hatchPanelPoints", "teleopPoints", "autoPoints"};
     // This array contains all the keys where the values differ between teams on the same alliance
     private final static String[] uniqueKeys = {};
 
@@ -51,15 +53,18 @@ public class MatchUpdater {
             }
         }
 
-        // This section handles specific keys and information that is structurally different from the rest
+       /* // This section handles specific keys and information that is structurally different from the rest
         for(int x = 0; x < 3; x++) {
             infoTable[x].put("endgameClimb", blueJSON.get("endgameRobot" + (x+1)).equals("Climbing"));
             infoTable[x+3].put("endgameClimb", redJSON.get("endgameRobot" + (x+1)).equals("Climbing"));
 
             infoTable[x].put("autoRun", blueJSON.get("autoRobot"+(x+1)).equals("AutoRun"));
             infoTable[x+3].put("autoRun", redJSON.get("autoRobot"+(x+1)).equals("AutoRun"));
-        }
+        }*/
 
+      /* for(Object e: infoTable){
+           Log.v("minto", e.toString());
+       }*/
         return infoTable;
     }
 

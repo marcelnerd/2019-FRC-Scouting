@@ -20,17 +20,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/keyButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="152dp"
-        android:layout_marginLeft="152dp"
-        android:layout_marginBottom="40dp"
-        android:text="Apply"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <TextView
         android:id="@+id/keyLabelText"
         android:layout_width="wrap_content"
@@ -41,5 +30,16 @@
         android:text="TBA Account Access Key"
         app:layout_constraintBottom_toTopOf="@+id/tbaKeyText"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/thingButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="104dp"
+        android:layout_marginLeft="104dp"
+        android:layout_marginTop="56dp"
+        android:text="Apply"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tbaKeyText" />
 
 </android.support.constraint.ConstraintLayout>

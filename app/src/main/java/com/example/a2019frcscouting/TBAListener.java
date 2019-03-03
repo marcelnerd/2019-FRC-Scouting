@@ -29,7 +29,7 @@ public class TBAListener implements Response.Listener<JSONObject> {
     @Override
     public void onResponse(JSONObject response) {
         HashMap[] map = null;
-        FRC2018Team team = null;
+        FRC2019Team team = null;
         //Log.v("minto", response.toString());
 
         /*try {
@@ -45,6 +45,8 @@ public class TBAListener implements Response.Listener<JSONObject> {
             map = MatchUpdater.getMatchData(response);
         } catch (JSONException e) {
             e.printStackTrace();
+            Log.v("minto", "you fucked up; its the getMatchData thing");
+
         }
 
 
@@ -55,7 +57,9 @@ public class TBAListener implements Response.Listener<JSONObject> {
 
         MainActivity.setCurrentMatch((MainActivity.getCurrentMatch() + 1));
         for (HashMap e : map) {
-            team = FRC2018Team.buildTeam(e.entrySet());
+            //Log.v("minto", e.toString());
+            team = FRC2019Team.buildTeam(e.entrySet());
+            //og.v("minto", "f");
             helper.updateTeamStats(team);
         }
 
