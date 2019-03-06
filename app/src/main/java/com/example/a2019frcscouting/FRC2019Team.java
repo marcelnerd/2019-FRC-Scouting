@@ -16,17 +16,19 @@ public class FRC2019Team {
     public float hatchPoints;
     public float cargoPoints;
     public int matchesPlayed = 1;
+    public float climb;
     public float[] scores;
-    public String[] scoreKeys = {"_id", "teleopPoints", "autoPoints", "cargoPoints", "hatchPoints", "matchesPlayed"};
+    public String[] scoreKeys = {"_id", "teleopPoints", "autoPoints", "cargoPoints", "hatchPoints", "climbPoints", "matchesPlayed"};
 
 
-    public FRC2019Team(int t, float ap, float tp, float hp, float cp) {
+    public FRC2019Team(int t, float ap, float tp, float hp, float cp, float cl) {
         teamNum = t;
         autoPoints = ap;
         teleopPoints = tp;
         hatchPoints = hp;
         cargoPoints = cp;
-        scores = new float[] {teamNum, teleopPoints, autoPoints, cargoPoints, hatchPoints};
+        climb = cl;
+        scores = new float[] {teamNum, teleopPoints, autoPoints, cargoPoints, hatchPoints, climb};
     }
 
     public FRC2019Team(SQLiteCursor cursor) {
@@ -42,6 +44,7 @@ public class FRC2019Team {
         float tempTP = 999;
         float tempHP = 999;
         float tempCP = 999;
+        float tempCL = 0;
 
         String currItem;
 
@@ -62,11 +65,14 @@ public class FRC2019Team {
             } else if (currItem.contains("hatchPanelPoints")) {
                 tempHP = Float.parseFloat(currItem.substring(currItem.indexOf('=') + 1, currItem.length()));
             }
+            else if(currItem.contains("habClimbPoints")) {
+                tempCL = Float.parseFloat(currItem.substring(currItem.indexOf('=') + 1, currItem.length()));
+            }
 
             //Log.d("minto", "Current entry item: " + currItem);
         }
 
-        return new FRC2019Team(tempTeamNum, tempAP, tempTP, tempHP, tempCP);
+        return new FRC2019Team(tempTeamNum, tempAP, tempTP, tempHP, tempCP, tempCL);
     }
 
     public void setMatchesPlayed(int i) {
