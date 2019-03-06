@@ -24,7 +24,7 @@ import java.util.HashMap;
 public class DBHelper extends SQLiteOpenHelper {
 
     private final static String SQL_CREATE_ENTRIES = "CREATE TABLE teams (_id INTEGER PRIMARY KEY, teleopPoints INT, autoPoints INT, autoRun FLOAT, vaultPoints INT, climb FLOAT, matchesPlayed INT);";
-    private final static String SQL_CREATE_ENTRIES_NEW = "CREATE TABLE teams (_id INTEGER PRIMARY KEY, teleopPoints INT, autoPoints INT, cargoPoints INT, hatchPoints INT, matchesPlayed INT);";
+    private final static String SQL_CREATE_ENTRIES_NEW = "CREATE TABLE teams (_id INTEGER PRIMARY KEY, teleopPoints FLOAT, autoPoints FLOAT, cargoPoints FLOAT, hatchPoints FLOAT, matchesPlayed INT);";
 
     private final static String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS teams";
     public final static String SQL_TABLE_NAME = "teams";
@@ -89,18 +89,20 @@ public class DBHelper extends SQLiteOpenHelper {
     public void updateTeamStats(FRC2019Team team) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        int oldTeleop, newTeleop, oldAutoP, newAutoP, oldCargo, newCargo, oldHatch, newHatch, matches;
+        float oldTeleop, newTeleop, oldAutoP, newAutoP, oldCargo, newCargo, oldHatch, newHatch, matches;
 
         //double oldARun, newARun, oldClimb, newClimb;
 
-        int teleop = team.teleopPoints;
-        int _id = team.teamNum;
-        int autoPoints = team.autoPoints;
-        int cargoPoints = team.cargoPoints;
-        int hatchPoints = team.hatchPoints;
+        float teleop = team.teleopPoints;
+        float _id = team.teamNum;
+        float autoPoints = team.autoPoints;
+        float cargoPoints = team.cargoPoints;
+        float hatchPoints = team.hatchPoints;
         matches = team.getMatchesPlayed();
 
         Cursor cursor = db.rawQuery("SELECT * FROM " + SQL_TABLE_NAME + " WHERE _id=" + _id + ";", null);
+
+        float oldScore, newScore, currScore;
 
         if(cursor.moveToNext()) { // There is already an entry for the team, updates the entry
 
@@ -113,31 +115,43 @@ public class DBHelper extends SQLiteOpenHelper {
             matches++;
             db.execSQL("UPDATE teams SET matchesPlayed=" + matches + " WHERE _id='" + _id + "';");
 
-            ////****UPDATE TELEOP****////
-            oldTeleop = cursor.getInt(1);
-            newTeleop = oldTeleop + teleop;
-            db.execSQL("UPDATE teams SET teleopPoints='" + newTeleop + "' WHERE _id='" + _id + "';");
-
-            ////****UPDATE AUTO SCORE****////
-            oldAutoP = cursor.getInt(2);
-            newAutoP = autoPoints + oldAutoP;
-            db.execSQL("UPDATE teams SET autoPoints=" + newAutoP + " WHERE _id='" + _id + "';");
-
-            ////****UPDATE CARGO POINTS****////
-            oldCargo = cursor.getInt(3)*(matches-1);
-            newCargo = cargoPoints + oldCargo;
-            db.execSQL("UPDATE teams SET cargoPoints=" + newCargo + " WHERE _id='" + _id + "';");
-
-            ////****UPDATE CLIMB****////
-          /*  matches = cursor.getFloat(5)*(matches-1);
-            newClimb = (oldClimb + climb) / matches;
-            db.execSQL("UPDATE teams SET climb=" + newClimb + " WHERE _id='" + _id + "';");*/
-
-            ////****UPDATE HATCH POINTS****////
-            oldHatch = cursor.getInt(4);
-            newHatch = hatchPoints + oldHatch;
-            db.execSQL("UPDATE teams SET hatchPoints=" + newHatch + " WHERE _id='" + _id + "';");
-
+            for(int i = 1; i < team.scores.length; i++) {
+                oldScore = cursor.getFloat(i) * (matches-1);
+                oldScore += team.scores[i];
+                newScore = oldScore/matches;
+                if(team.teamNum == 973) {
+                    Log.v("minto", "HEREREERE " + matches + "   " + (cursor.getFloat(i)*(matches-1)) + " " + team.scores[i]);
+                }
+                db.execSQL("UPDATE teams SET " + team.scoreKeys[i] + "=" + newScore + " WHERE _id='" + _id + "';");
+            }
+//
+//            ////****UPDATE TELEOP****////
+//            oldTeleop = cursor.getFloat(1) * (matches-1);
+//            oldTeleop += teleop;
+//            newTeleop = oldTeleop/matches;
+//            db.execSQL("UPDATE teams SET teleopPoints='" + newTeleop + "' WHERE _id='" + _id + "';");
+//
+//            ////****UPDATE AUTO SCORE****////
+//            oldAutoP = cursor.getInt(2)*(matches-1);
+//            oldAutoP += autoPoints;
+//            newAutoP = oldAutoP/matches;
+//            db.execSQL("UPDATE teams SET autoPoints=" + newAutoP + " WHERE _id='" + _id + "';");
+//
+//            ////****UPDATE CARGO POINTS****////
+//            oldCargo = cursor.getInt(3)*(matches-1);
+//            newCargo = cargoPoints + oldCargo;
+//            db.execSQL("UPDATE teams SET cargoPoints=" + newCargo + " WHERE _id='" + _id + "';");
+//
+//            ////****UPDATE CLIMB****////
+//          /*  matches = cursor.getFloat(5)*(matches-1);
+//            newClimb = (oldClimb + climb) / matches;
+//            db.execSQL("UPDATE teams SET climb=" + newClimb + " WHERE _id='" + _id + "';");*/
+//
+//            ////****UPDATE HATCH POINTS****////
+//            oldHatch = cursor.getInt(4);
+//            newHatch = hatchPoints + oldHatch;
+//            db.execSQL("UPDATE teams SET hatchPoints=" + newHatch + " WHERE _id='" + _id + "';");
+//
         }
         else { //There is not yet an entry for this team, create an entry
             db.execSQL("INSERT INTO " + SQL_TABLE_NAME + " VALUES (" + _id + ", " + teleop + ", " + autoPoints + ", " + cargoPoints + ", " + hatchPoints + ", " + matches + ");"); //MOST RECENTLELY CHANGED
@@ -228,7 +242,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public String getAllEntries() {
-        SQLiteDatabase db = this .getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase();
         String returnString = "";
         Cursor cursor;
         cursor = db.rawQuery("SELECT * FROM " + SQL_TABLE_NAME + ";", null);
@@ -277,7 +291,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public Cursor getAllEntriesCargoCursor() {
         SQLiteDatabase db = this .getWritableDatabase();
         Cursor cursor;
-        cursor = db.rawQuery("SELECT * FROM " + SQL_TABLE_NAME + " ORDER BY hatchPoints DESC" + ";", null);
+        cursor = db.rawQuery("SELECT * FROM " + SQL_TABLE_NAME + " ORDER BY cargoPoints DESC" + ";", null);
 
         return cursor;
     }

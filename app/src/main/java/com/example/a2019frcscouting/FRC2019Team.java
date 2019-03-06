@@ -9,36 +9,39 @@ import java.util.Set;
 public class FRC2019Team {
     public int teamNum;
     //public boolean climb;
-    public int autoPoints;
+    public float autoPoints;
     public boolean autoRun;
-    public int teleopPoints;
+    public float teleopPoints;
     public float autoRunPerc;
-    public int hatchPoints;
-    public int cargoPoints;
-    public int matchesPlayed = 0;
+    public float hatchPoints;
+    public float cargoPoints;
+    public int matchesPlayed = 1;
+    public float[] scores;
+    public String[] scoreKeys = {"_id", "teleopPoints", "autoPoints", "cargoPoints", "hatchPoints", "matchesPlayed"};
 
-    public FRC2019Team(int t, int ap, int tp, int hp, int cp) {
+
+    public FRC2019Team(int t, float ap, float tp, float hp, float cp) {
         teamNum = t;
         autoPoints = ap;
         teleopPoints = tp;
         hatchPoints = hp;
         cargoPoints = cp;
+        scores = new float[] {teamNum, teleopPoints, autoPoints, cargoPoints, hatchPoints};
     }
 
     public FRC2019Team(SQLiteCursor cursor) {
 
     }
 
-
-    public static FRC2019Team buildTeam(Set entry) {
+    public static FRC2019Team buildTeam(Set entry) { //
 
         //boolean tempClimb = false;
-        int tempAP = 999;
+        float tempAP = 999;
         boolean tempAR = false;
         int tempTeamNum = 0;
-        int tempTP = 999;
-        int tempHP = 999;
-        int tempCP = 999;
+        float tempTP = 999;
+        float tempHP = 999;
+        float tempCP = 999;
 
         String currItem;
 
@@ -47,17 +50,17 @@ public class FRC2019Team {
         while (it.hasNext()) {
             currItem = it.next().toString();
             if (currItem.contains("cargoPoints")) {
-                tempCP = Integer.parseInt(currItem.substring(currItem.indexOf('=') + 1, currItem.length()));
+                tempCP = Float.parseFloat(currItem.substring(currItem.indexOf('=') + 1, currItem.length()));
                 //Log.v("minto", Boolean.toString(tempClimb));
             } else if (currItem.contains("autoPoints")) {
-                tempAP = Integer.parseInt(currItem.substring(currItem.indexOf('=') + 1, currItem.length()));
+                tempAP = Float.parseFloat(currItem.substring(currItem.indexOf('=') + 1, currItem.length()));
             } else if (currItem.contains("teamNumber")) {
                 tempTeamNum = Integer.parseInt(currItem.substring(currItem.indexOf('=') + 1, currItem.length()));
                 //Log.v("minto", Integer.toString(tempTeamNum));
             } else if (currItem.contains("teleopPoints")) {
-                tempTP = Integer.parseInt(currItem.substring(currItem.indexOf('=') + 1, currItem.length()));
+                tempTP = Float.parseFloat(currItem.substring(currItem.indexOf('=') + 1, currItem.length()));
             } else if (currItem.contains("hatchPanelPoints")) {
-                tempHP = Integer.parseInt(currItem.substring(currItem.indexOf('=') + 1, currItem.length()));
+                tempHP = Float.parseFloat(currItem.substring(currItem.indexOf('=') + 1, currItem.length()));
             }
 
             //Log.d("minto", "Current entry item: " + currItem);
