@@ -22,14 +22,14 @@ public class TBAHandler {
     private static final String eventKey = "2019caoc"; //TODO DONT FORGET TO CHANGE THIS BACK
     private static final int currentYear = 2019;
     public static JSONObject json;
-    private RequestQueue queue;
+    //private RequestQueue queue;
     public static DBHelper helper; //This helper can be accessed statically by any class.
 
 
     public TBAHandler(Context context) {
         helper = new DBHelper(MainActivity.c);
-        queue = Volley.newRequestQueue(context);
-        queue.start();
+        //queue = Volley.newRequestQueue(context);
+        //queue.start();
     }
 
     public void getMatchData(String call) {
@@ -48,9 +48,10 @@ public class TBAHandler {
             error.printStackTrace();
             Log.v("minto", error.getMessage() + "");
             }
+
         });
 
-        queue.add(request);
+        MainActivity.queue.add(request);
 
     }
 

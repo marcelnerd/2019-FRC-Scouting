@@ -10,7 +10,7 @@ public class MatchUpdater {
     // Arrays containing all the keys of interest
     // This array contains all the keys where the values are the same for each team on the same alliance
     private final static String[] genericKeys = {"teleopScaleOwnershipSec", "autoScaleOwnershipSec", "vaultPoints", "autoSwitchAtZero", "teleopOwnershipPoints", "teleopPoints", "autoOwnershipPoints", "autoPoints", "teleopSwitchOwnershipSec"};
-    private final static String[] tempKeys = {"cargoPoints", "hatchPanelPoints", "teleopPoints", "autoPoints"};
+    private final static String[] tempKeys = {"cargoPoints", "hatchPanelPoints", "teleopPoints", "autoPoints", "habClimbPoints"};
     // This array contains all the keys where the values differ between teams on the same alliance
     private final static String[] uniqueKeys = {};
 

@@ -40,9 +40,13 @@ public class FrodoCursorAdapter extends CursorAdapter {
             case "teleop":
                 statText.setText(cursor.getString(cursor.getColumnIndex("teleopPoints")).toString());
                 break;
-            case "team":
-                statText.setText(cursor.getString(cursor.getColumnIndex("_id")).toString());
+            case "auto":
+                statText.setText(cursor.getString(cursor.getColumnIndex("autoPoints")).toString());
                 break;
+            case "hatch":
+                statText.setText(cursor.getString(cursor.getColumnIndex("hatchPoints")).toString());
+            case "cargo":
+                statText.setText(cursor.getString(cursor.getColumnIndex("cargoPoints")).toString());
             //TODO MORE OPTIONS!!!!!!!!!!!
         }
 

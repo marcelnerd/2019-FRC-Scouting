@@ -10,8 +10,10 @@
     <string name="title_activity_settings">Settings</string>
 
     <string-array name="sort_array">
-        <item>teamNum</item>
-        <item>teleop</item>
+        <item>Teleop Points</item>
+        <item>Autonomous Points</item>
+        <item>Hatch Points</item>
+        <item>Cargo Points</item>
     </string-array>
 
     <!-- Strings related to Settings -->

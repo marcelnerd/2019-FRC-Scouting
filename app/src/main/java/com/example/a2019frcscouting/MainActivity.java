@@ -21,6 +21,9 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
+
 import static com.example.a2019frcscouting.TBAHandler.helper;
 
 /*
@@ -44,6 +47,7 @@ public class MainActivity extends FragmentActivity implements ListFragment.OnFra
     public static String TBAKey;
     public static Spinner sortSpinner;
     public static ArrayAdapter<CharSequence> adap;
+    public static RequestQueue queue;
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -93,9 +97,8 @@ public class MainActivity extends FragmentActivity implements ListFragment.OnFra
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Fragment fragment;
-        FragmentTransaction transaction;
         c = getBaseContext();
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         sharedPref = this.getPreferences(Context.MODE_PRIVATE);
         setContentView(R.layout.activity_main);
@@ -103,8 +106,21 @@ public class MainActivity extends FragmentActivity implements ListFragment.OnFra
         list = findViewById(R.id.listMain);
         handler = new TBAHandler(this);
         TBAKey = sharedPref.getString(getString(R.string.settings_key_key), "yeet");
+        queue = Volley.newRequestQueue(this);
+        queue.start();
+
+        Fragment fragment;
+        FragmentTransaction transaction;
 
         handler.helper.onUpgrade(handler.helper.getWritableDatabase(), 0, 4);
+
+        button.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FrodoCursorAdapter todoAdapter = new FrodoCursorAdapter(MainActivity.c, helper.getAllEntriesTeleopCursor(), "teleop");
+                MainActivity.list.setAdapter(todoAdapter);
+            }
+        });
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -121,17 +137,22 @@ public class MainActivity extends FragmentActivity implements ListFragment.OnFra
                 switch(position) {
                     case 0:
                         //handler.getMatchData(String.format("/match/%1$s_qm%2$d", "2018mndu", currentMatch));
-                        todoAdapter = new FrodoCursorAdapter(MainActivity.c, helper.getAllEntriesTeamCursor(), "team");
+                        todoAdapter = new FrodoCursorAdapter(MainActivity.c, helper.getAllEntriesTeleopCursor(), "teleop");
                         MainActivity.list.setAdapter(todoAdapter);
                         //transaction.replace(R.id.listFrameLayout, new ListFragment());
                         //transaction.commit();
                         break;
                     case 1:
-                        todoAdapter = new FrodoCursorAdapter(MainActivity.c, helper.getAllEntriesTeleopCursor(), "teleop");
+                        todoAdapter = new FrodoCursorAdapter(MainActivity.c, helper.getAllEntriesAutoCursor(), "auto");
                         MainActivity.list.setAdapter(todoAdapter);
                         break;
                     case 2:
+                        todoAdapter = new FrodoCursorAdapter(MainActivity.c, helper.getAllEntriesHatchCursor(), "hatch");
+                        MainActivity.list.setAdapter(todoAdapter);
                         break;
+                    case 3:
+                        todoAdapter = new FrodoCursorAdapter(MainActivity.c, helper.getAllEntriesCargoCursor(), "cargo");
+                        MainActivity.list.setAdapter(todoAdapter);
                 }
             }
 
@@ -150,44 +171,22 @@ public class MainActivity extends FragmentActivity implements ListFragment.OnFra
                 Intent intent = new Intent(MainActivity.c, TeamInfoActivity.class);
 
                 intent.putExtra("teamNum", Integer.toString(cursor.getInt(0)));
-                intent.putExtra("teleop", Integer.toString(cursor.getInt(1)));
-                intent.putExtra("cargoPoints", Integer.toString(cursor.getInt(cursor.getColumnIndex("cargoPoints"))));
-                intent.putExtra("hatchPoints", Integer.toString(cursor.getInt(cursor.getColumnIndex("hatchPoints"))));
-                intent.putExtra("autoPoints", Integer.toString(cursor.getInt(cursor.getColumnIndex("autoPoints"))));
+                intent.putExtra("teleop", Float.toString(cursor.getFloat(1)));
+                intent.putExtra("cargoPoints", Float.toString(cursor.getFloat(cursor.getColumnIndex("cargoPoints"))));
+                intent.putExtra("hatchPoints", Float.toString(cursor.getFloat(cursor.getColumnIndex("hatchPoints"))));
+                intent.putExtra("autoPoints", Float.toString(cursor.getFloat(cursor.getColumnIndex("autoPoints"))));
                 startActivity(intent);
 
             }
         });
 
-        for (int i = 1; i < 2; i++) {
+        for (int i = 1; i < 83; i++) {
             handler.getMatchData(String.format("/match/%1$s_qm%2$d", "2019caoc", i));
         }
 
-       /* fragment = new ListFragment();
-        transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.listFrameLayout, fragment);
-        transaction.commit();*/
+        FrodoCursorAdapter todoAdapter = new FrodoCursorAdapter(MainActivity.c, helper.getAllEntriesTeleopCursor(), "teleop");
+        MainActivity.list.setAdapter(todoAdapter);
 
-
-
-        //handler.getMatchData(String.format("/match/%1$s_qm%2$d", "2018_mndu", 1));
-        //Log.v("minto", handler.helper.getAllEntries());
-
-//        button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                handler.getMatchData(String.format("/match/%1$s_qm%2$d", "2018mndu", currentMatch));
-//                currentMatch++;
-//            }
-//        });
-
-        //handler.helper.onUpgrade(handler.helper.getWritableDatabase(), 4, 5);
-//        for (int i = 1; i < 100; i++) {
-//            handler.getMatchData(String.format("/match/%1$s_qm%2$d", "2018mndu", i));
-//        }
-
-//        FrodoCursorAdapter todoAdapter = new FrodoCursorAdapter(this, TBAHandler.helper.getAllEntriesTeamCursor());
-//        list.setAdapter(todoAdapter);
     }
 
     @Override
