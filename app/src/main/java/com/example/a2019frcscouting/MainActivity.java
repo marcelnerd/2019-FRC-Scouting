@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 
@@ -48,6 +49,8 @@ public class MainActivity extends FragmentActivity implements ListFragment.OnFra
     public static Spinner sortSpinner;
     public static ArrayAdapter<CharSequence> adap;
     public static RequestQueue queue;
+    public static EditText searchText;
+    public static Button searchButton;
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -104,6 +107,7 @@ public class MainActivity extends FragmentActivity implements ListFragment.OnFra
         setContentView(R.layout.activity_main);
         button = findViewById(R.id.button);
         list = findViewById(R.id.listMain);
+        sortSpinner = findViewById(R.id.sortSpinner);
         handler = new TBAHandler(this);
         TBAKey = sharedPref.getString(getString(R.string.settings_key_key), "yeet");
         queue = Volley.newRequestQueue(this);
@@ -111,6 +115,17 @@ public class MainActivity extends FragmentActivity implements ListFragment.OnFra
 
         Fragment fragment;
         FragmentTransaction transaction;
+
+        searchButton = findViewById(R.id.searchButton);
+        searchText = findViewById(R.id.searchText);
+
+        searchButton.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FrodoCursorAdapter todoAdapter = new FrodoCursorAdapter(MainActivity.c, helper.getTeamEntry(Integer.parseInt(searchText.getText().toString())), "teleop");
+                MainActivity.list.setAdapter(todoAdapter);
+            }
+        });
 
         handler.helper.onUpgrade(handler.helper.getWritableDatabase(), 0, 4);
 
@@ -124,7 +139,7 @@ public class MainActivity extends FragmentActivity implements ListFragment.OnFra
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        sortSpinner = findViewById(R.id.sortSpinner);
+        //sortSpinner = findViewById(R.id.sortSpinner);
         adap = ArrayAdapter.createFromResource(this, R.array.sort_array, android.R.layout.simple_spinner_item);
         adap.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         sortSpinner.setAdapter(adap);
@@ -153,6 +168,9 @@ public class MainActivity extends FragmentActivity implements ListFragment.OnFra
                     case 3:
                         todoAdapter = new FrodoCursorAdapter(MainActivity.c, helper.getAllEntriesCargoCursor(), "cargo");
                         MainActivity.list.setAdapter(todoAdapter);
+                    case 4:
+                        todoAdapter = new FrodoCursorAdapter(MainActivity.c, helper.getAllEntriesWinCursor(), "win");
+                        MainActivity.list.setAdapter(todoAdapter);
                 }
             }
 
@@ -175,6 +193,7 @@ public class MainActivity extends FragmentActivity implements ListFragment.OnFra
                 intent.putExtra("cargoPoints", Float.toString(cursor.getFloat(cursor.getColumnIndex("cargoPoints"))));
                 intent.putExtra("hatchPoints", Float.toString(cursor.getFloat(cursor.getColumnIndex("hatchPoints"))));
                 intent.putExtra("autoPoints", Float.toString(cursor.getFloat(cursor.getColumnIndex("autoPoints"))));
+                intent.putExtra("win", Float.toString(cursor.getFloat(cursor.getColumnIndex("winRate"))));
                 startActivity(intent);
 
             }

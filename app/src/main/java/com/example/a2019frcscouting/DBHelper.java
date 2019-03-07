@@ -24,7 +24,7 @@ import java.util.HashMap;
 public class DBHelper extends SQLiteOpenHelper {
 
     private final static String SQL_CREATE_ENTRIES = "CREATE TABLE teams (_id INTEGER PRIMARY KEY, teleopPoints INT, autoPoints INT, autoRun FLOAT, vaultPoints INT, climb FLOAT, matchesPlayed INT);";
-    private final static String SQL_CREATE_ENTRIES_NEW = "CREATE TABLE teams (_id INTEGER PRIMARY KEY, teleopPoints FLOAT, autoPoints FLOAT, cargoPoints FLOAT, hatchPoints FLOAT, lowClimb FLOAT, midClimb FLOAT, highClimb FLOAT, matchesPlayed INT);";
+    private final static String SQL_CREATE_ENTRIES_NEW = "CREATE TABLE teams (_id INTEGER PRIMARY KEY, teleopPoints FLOAT, autoPoints FLOAT, cargoPoints FLOAT, hatchPoints FLOAT, lowClimb FLOAT, midClimb FLOAT, highClimb FLOAT, winRate FLOAT, matchesPlayed INT);";
 
     private final static String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS teams";
     public final static String SQL_TABLE_NAME = "teams";
@@ -44,8 +44,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQL_CREATE_ENTRIES_NEW);
-        db.execSQL("INSERT INTO teams VALUES (-1, 0, 0, 0, 0, 0, 0, 0, 0)"); // Entry for mean of each value
-        db.execSQL("INSERT INTO teams VALUES (-2, 0, 0, 0, 0, 0, 0, 0, 0)"); // Entry for standard deviation of each value
+        db.execSQL("INSERT INTO teams VALUES (-1, 0, 0, 0, 0, 0, 0, 0, 0, 0)"); // Entry for mean of each value
+        db.execSQL("INSERT INTO teams VALUES (-2, 0, 0, 0, 0, 0, 0, 0, 0, 0)"); // Entry for standard deviation of each value
 //        SQLiteDatabase d = this.getWritableDatabase();
     }
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -149,6 +149,7 @@ public class DBHelper extends SQLiteOpenHelper {
         float c1 = team.climb1;
         float c2 = team.climb2;
         float c3 = team.climb3;
+        float win = team.win;
         float matches = team.getMatchesPlayed();
 
         Cursor cursor = db.rawQuery("SELECT * FROM " + SQL_TABLE_NAME + " WHERE _id=" + _id + ";", null);
@@ -162,7 +163,7 @@ public class DBHelper extends SQLiteOpenHelper {
             cursor.moveToLast();
 
             ////****UPDATE MATCHES PLAYED****////
-            matches = cursor.getInt(8);
+            matches = cursor.getInt(9);
             matches++;
             db.execSQL("UPDATE teams SET matchesPlayed=" + matches + " WHERE _id='" + _id + "';");
 
@@ -205,107 +206,16 @@ public class DBHelper extends SQLiteOpenHelper {
 //
         }
         else { //There is not yet an entry for this team, create an entry
-            db.execSQL("INSERT INTO " + SQL_TABLE_NAME + " VALUES (" + _id + ", " + teleop + ", " + autoPoints + ", " + cargoPoints + ", " + hatchPoints + ", " + c1 + ", " + c2 + ", " + c3 + ", " + matches + ");"); //MOST RECENTLELY CHANGED
+            db.execSQL("INSERT INTO " + SQL_TABLE_NAME + " VALUES (" + _id + ", " + teleop + ", " + autoPoints + ", " + cargoPoints + ", " + hatchPoints + ", " + c1 + ", " + c2 + ", " + c3 + ", " + win + ", " + matches + ");"); //MOST RECENTLELY CHANGED
             Log.v("minto", "INSERT ONE " + _id);
         }
 
         db.close();
     }
-
-    public void updateTeamStats(FRC2018Team team) { //Old. For 2018 Teams
+    public Cursor getTeamEntry(int teamNum) {
         SQLiteDatabase db = this.getWritableDatabase();
-
-
-        int oldTeleop, newTeleop, oldAutoP, newAutoP, oldVault, newVault, matches;
-
-        double oldARun, newARun, oldClimb, newClimb;
-
-        int teleop = team.getTeleopPoints();
-        int _id = team.getTeamNum();
-        int autoPoints = team.getAutoPoints();
-        int vaultPoints = team.getVaultPoints();
-        int autoRun = team.getAutoRunBit();
-        int climb = team.getClimbBit();
-        matches = team.getMatchesPlayed();
-
-        Cursor cursor = db.rawQuery("SELECT * FROM " + SQL_TABLE_NAME + " WHERE _id=" + _id + ";", null);
-
-        if(cursor.moveToNext()) { // There is already an entry for the team, updates the entry
-
-            Log.d("minto", "updating team " + _id);
-
-            cursor.moveToLast();
-
-            ////****UPDATE MATCHES PLAYED****////
-            matches = cursor.getInt(6);
-            matches++;
-            db.execSQL("UPDATE teams SET matchesPlayed=" + matches + " WHERE _id='" + _id + "';");
-
-            ////****UPDATE TELEOP****////
-            oldTeleop = cursor.getInt(1);
-            newTeleop = oldTeleop + teleop;
-            db.execSQL("UPDATE teams SET teleopPoints='" + newTeleop + "' WHERE _id='" + _id + "';");
-
-            ////****UPDATE AUTO SCORE****////
-            oldAutoP = cursor.getInt(2);
-            newAutoP = autoPoints + oldAutoP;
-            db.execSQL("UPDATE teams SET autoPoints=" + newAutoP + " WHERE _id='" + _id + "';");
-
-            ////****UPDATE AUTO RUN****////
-            oldARun = cursor.getFloat(3)*(matches-1);
-            newARun = (oldARun + autoRun) / matches;
-            db.execSQL("UPDATE teams SET autoRun=" + newARun + " WHERE _id='" + _id + "';");
-
-            ////****UPDATE CLIMB****////
-            oldClimb = cursor.getFloat(5)*(matches-1);
-            newClimb = (oldClimb + climb) / matches;
-            db.execSQL("UPDATE teams SET climb=" + newClimb + " WHERE _id='" + _id + "';");
-
-            ////****UPDATE VAULT POINTS****////
-            oldVault = cursor.getInt(4);
-            newVault = vaultPoints + oldVault;
-            db.execSQL("UPDATE teams SET vaultPoints=" + newVault + " WHERE _id='" + _id + "';");
-
-        }
-        else { //There is not yet an entry for this team, create an entry
-            db.execSQL("INSERT INTO " + SQL_TABLE_NAME + " VALUES (" + _id + ", " + teleop + ", " + autoPoints + ", " + autoRun + ", " + vaultPoints + ", " + climb + ", " + matches + ");"); //MOST RECENTLELY CHANGED
-            Log.v("minto", "INSERT ONE " + _id);
-        }
-
-        db.close();
-        //Log.v("minto", getTeamData(93));
-    }
-
-    public String getTeamData(int _id) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        String returnString = "";
-        Cursor cursor;
-        cursor = db.rawQuery("SELECT * FROM " + SQL_TABLE_NAME + " WHERE _id=" + Integer.toString(_id) + ";", null);
-
-        while(cursor.moveToNext()) {
-            returnString += "Team ID: " + Integer.toString(cursor.getInt(0)) + "  Teleop: " + Integer.toString(cursor.getInt(1)) + "   Auto Points: " + cursor.getInt(2);
-        }
-
-        cursor.close();
-        db.close();
-
-        return returnString;
-    }
-
-    public String getAllEntries() {
-        SQLiteDatabase db = this.getWritableDatabase();
-        String returnString = "";
-        Cursor cursor;
-        cursor = db.rawQuery("SELECT * FROM " + SQL_TABLE_NAME + ";", null);
-
-       while(cursor.moveToNext()) {
-            Log.v("minto", "Team ID: " + Integer.toString(cursor.getInt(0)) + "  Teleop: " + Integer.toString(cursor.getInt(1)) + "   Auto Points: " + cursor.getInt(2));
-            returnString += "Team ID: " + Integer.toString(cursor.getInt(0)) + "  Teleop: " + Integer.toString(cursor.getInt(1)) + "   Auto Points: " + cursor.getInt(2);
-        }
-
-        cursor.close();
-        db.close();
-        return returnString;
+        Cursor cursor = db.rawQuery("SELECT * FROM teams WHERE _id=" + teamNum + ";", null);
+        return cursor;
     }
 
     public Cursor getAllEntriesTeamCursor() {
@@ -343,6 +253,14 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this .getWritableDatabase();
         Cursor cursor;
         cursor = db.rawQuery("SELECT * FROM " + SQL_TABLE_NAME + " ORDER BY cargoPoints DESC" + ";", null);
+
+        return cursor;
+    }
+
+    public Cursor getAllEntriesWinCursor() {
+        SQLiteDatabase db = this .getWritableDatabase();
+        Cursor cursor;
+        cursor = db.rawQuery("SELECT * FROM " + SQL_TABLE_NAME + " ORDER BY winRate DESC" + ";", null);
 
         return cursor;
     }

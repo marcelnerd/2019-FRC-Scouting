@@ -18,19 +18,24 @@ public class FRC2019Team {
     public float climb1;
     public float climb2;
     public float climb3;
+    public float win;
     public int matchesPlayed = 1;
     public static float[] scores;
-    public static String[] scoreKeys = {"_id", "teleopPoints", "autoPoints", "cargoPoints", "hatchPoints", "lowClimb", "midClimb", "highClimb" };
+    public static String[] scoreKeys = {"_id", "teleopPoints", "autoPoints", "cargoPoints", "hatchPoints", "lowClimb", "midClimb", "highClimb", "winRate"};
 
 
-    public FRC2019Team(int t, float ap, float tp, float hp, float cp, float c1, float c2, float c3) {
+    public FRC2019Team(int t, float ap, float tp, float hp, float cp, float c1, float c2, float c3, float w) {
         teamNum = t;
         autoPoints = ap;
         teleopPoints = tp;
         hatchPoints = hp;
         cargoPoints = cp;
+        climb1 = c1;
+        climb2 = c2;
+        climb3 = c3;
+        win = w;
 
-        scores = new float[] {teamNum, teleopPoints, autoPoints, cargoPoints, hatchPoints, climb1, climb2, climb3};
+        scores = new float[] {teamNum, teleopPoints, autoPoints, cargoPoints, hatchPoints, climb1, climb2, climb3, win};
     }
 
     public FRC2019Team(SQLiteCursor cursor) {
@@ -49,6 +54,7 @@ public class FRC2019Team {
         float tempC1 = 0;
         float tempC2 = 0;
         float tempC3 = 0;
+        float tempWin = 0;
 
         String currItem;
 
@@ -68,6 +74,9 @@ public class FRC2019Team {
                 tempTP = Float.parseFloat(currItem.substring(currItem.indexOf('=') + 1, currItem.length()));
             } else if (currItem.contains("hatchPanelPoints")) {
                 tempHP = Float.parseFloat(currItem.substring(currItem.indexOf('=') + 1, currItem.length()));
+            }
+            else if(currItem.contains("win")) {
+                tempWin = Float.parseFloat(currItem.substring(currItem.indexOf('=') + 1, currItem.length()));
             }
             else if(currItem.contains("endgameRobot1")) {
                 switch(currItem.substring(currItem.indexOf('='))) {
@@ -126,7 +135,7 @@ public class FRC2019Team {
             //Log.d("minto", "Current entry item: " + currItem);
         }
 
-        return new FRC2019Team(tempTeamNum, tempAP, tempTP, tempHP, tempCP, tempC1, tempC2, tempC3);
+        return new FRC2019Team(tempTeamNum, tempAP, tempTP, tempHP, tempCP, tempC1, tempC2, tempC3, tempWin);
     }
 
     public void setMatchesPlayed(int i) {

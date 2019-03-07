@@ -20,7 +20,7 @@
     <ListView
         android:id="@+id/listMain"
         android:layout_width="wrap_content"
-        android:layout_height="546dp"
+        android:layout_height="550dp"
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinLayout" />
@@ -39,8 +39,8 @@
     <android.support.constraint.ConstraintLayout
         android:id="@+id/spinLayout"
         android:layout_width="395dp"
-        android:layout_height="84dp"
-        android:layout_marginTop="10dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="70dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -57,5 +57,28 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </android.support.constraint.ConstraintLayout>
+
+    <EditText
+        android:id="@+id/searchText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Search Team"
+        android:inputType="number"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/searchButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:text="Search"
+        app:layout_constraintBaseline_toBaselineOf="@+id/searchText"
+        app:layout_constraintStart_toEndOf="@+id/searchText" />
 
 </android.support.constraint.ConstraintLayout>

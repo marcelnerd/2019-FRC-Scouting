@@ -45,9 +45,14 @@ public class FrodoCursorAdapter extends CursorAdapter {
                 break;
             case "hatch":
                 statText.setText(cursor.getString(cursor.getColumnIndex("hatchPoints")).toString());
+                break;
             case "cargo":
                 statText.setText(cursor.getString(cursor.getColumnIndex("cargoPoints")).toString());
-            //TODO MORE OPTIONS!!!!!!!!!!!
+                break;
+            case "win":
+                statText.setText(cursor.getString(cursor.getColumnIndex("winRate")).toString());
+
+                //TODO MORE OPTIONS!!!!!!!!!!!
         }
 
         /*telePointsText.setOnClickListener(new View.OnClickListener() {

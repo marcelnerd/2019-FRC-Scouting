@@ -9,7 +9,7 @@ import static com.example.a2019frcscouting.TBAHandler.helper;
 
 public class TeamInfoActivity extends AppCompatActivity {
 
-    TextView teamText, teleopText, autoText, hatchText, cargoText;
+    TextView teamText, teleopText, autoText, hatchText, cargoText, winText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +24,7 @@ public class TeamInfoActivity extends AppCompatActivity {
         autoText = findViewById(R.id.autoText);
         hatchText = findViewById(R.id.hatchText);
         cargoText = findViewById(R.id.cargoText);
+        winText = findViewById(R.id.winText);
 
        // teamText.append(intent.getStringExtra("teamNum") + "; Signifgance: " + MainActivity.handler.helper.getSig(Float.parseFloat(intent.getStringExtra("teamNum")), "_id"));
 
@@ -32,6 +33,6 @@ public class TeamInfoActivity extends AppCompatActivity {
         autoText.append(intent.getStringExtra("autoPoints") + "; Signifgance: " + MainActivity.handler.helper.getSig(Float.parseFloat(intent.getStringExtra("autoPoints")), "autoPoints"));
         hatchText.append(intent.getStringExtra("hatchPoints") + "; Signifgance: " + MainActivity.handler.helper.getSig(Float.parseFloat(intent.getStringExtra("hatchPoints")), "hatchPoints"));
         cargoText.append(intent.getStringExtra("cargoPoints") + "; Signifgance: " + MainActivity.handler.helper.getSig(Float.parseFloat(intent.getStringExtra("cargoPoints")), "cargoPoints"));
-
+        winText.append(intent.getStringExtra("win") + "; Signifigance: " + MainActivity.handler.helper.getSig(Float.parseFloat(intent.getStringExtra("win")), "winRate"));
     }
 }

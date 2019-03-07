@@ -69,6 +69,19 @@ public class MatchUpdater {
             }
         }
 
+        if(Integer.parseInt(blueJSON.get("totalPoints").toString()) > Integer.parseInt(redJSON.get("totalPoints").toString())) {
+            for(int i = 0; i < 3; i++) {
+                infoTable[i].put("win", 1);
+                infoTable[i+3].put("win", 0);
+            }
+        }
+        else {
+            for(int i = 0; i < 3; i++) {
+                infoTable[i].put("win", 0);
+                infoTable[i+3].put("win", 1);
+            }
+        }
+
       /* for(Object e: infoTable){
            Log.v("minto", e.toString());
        }*/
