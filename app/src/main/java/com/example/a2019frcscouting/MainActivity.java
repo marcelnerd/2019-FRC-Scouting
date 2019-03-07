@@ -180,10 +180,9 @@ public class MainActivity extends FragmentActivity implements ListFragment.OnFra
             }
         });
 
-        for (int i = 1; i < 83; i++) {
+        for (int i = 1; i < 82; i++) {
             handler.getMatchData(String.format("/match/%1$s_qm%2$d", "2019caoc", i));
         }
-        helper.doStatsStuff("yeet");
 
         /*FrodoCursorAdapter todoAdapter = new FrodoCursorAdapter(MainActivity.c, helper.getAllEntriesTeleopCursor(), "teleop");
         MainActivity.list.setAdapter(todoAdapter);*/

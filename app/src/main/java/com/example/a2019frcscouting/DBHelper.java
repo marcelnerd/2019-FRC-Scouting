@@ -90,26 +90,50 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public void doStatsStuff(String important) {
         double[] stats;
+        //Log.e("minto", "djfdkjfkdjdldfkf");
         ArrayList<Float> valueList = new ArrayList<>();
         double[] doubleArray;
         Cursor cursor;
         SQLiteDatabase db = this.getWritableDatabase();
         if(important.contentEquals("yeet")) {
-            for(int i = 0; i < FRC2019Team.scoreKeys.length; i++) {
-                cursor = db.rawQuery("SELECT " + FRC2019Team.scoreKeys[i] + " FROM " + SQL_TABLE_NAME + ";", null);
+            for(int i = 1; i < FRC2019Team.scoreKeys.length; i++) {
+                cursor = db.rawQuery("SELECT * FROM teams;", null);
+
+                cursor.moveToFirst();
                 while(cursor.moveToNext()) {
                     valueList.add(cursor.getFloat(i));
                 }
 
                 doubleArray = new double[valueList.size()];
-                for (int x = 0; x < valueList.size(); i++) {
-                    doubleArray[i] = valueList.get(i);
+
+                for (int x = 0; x < valueList.size(); x++) {
+                    doubleArray[x] = valueList.get(x);
                 }
+                //Log.v("minto", "fdfdf" + Float.toString(valueList.get(0)));
+                for(int f=0; f< doubleArray.length;f++) {
+                    Log.e("minto", Double.toString(doubleArray[f]));
+                }
+
                 stats = StatAnalyser.getStats(doubleArray);
                 db.execSQL("UPDATE teams SET " + FRC2019Team.scoreKeys[i] + "=" + stats[0] + " WHERE _id=-1;"); //Update mean of value
                 db.execSQL("UPDATE teams SET " + FRC2019Team.scoreKeys[i] + "=" + stats[1] + " WHERE _id=-2;"); //Update standard deviation of value
             }
         }
+    }
+
+    public double getSig(float value, String type) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor meanCursor = db.rawQuery("SELECT " + type + " FROM teams WHERE _id=-1;", null);
+        Cursor sdCursor = db.rawQuery("SELECT * FROM teams WHERE _id=-2;", null);
+        //Log.e("minto", "count: " + Float.toString(meanCursor.getFloat(0)));
+        //double mean = meanCursor.getFloat(meanCursor.getColumnIndex(type));
+        meanCursor.moveToNext();
+        sdCursor.moveToNext();
+        double mean = meanCursor.getFloat(meanCursor.getColumnIndex(type));
+        double sd = sdCursor.getFloat(sdCursor.getColumnIndex(type));
+        double v = value;
+        Log.e("minto", "stuff" + Double.toString(mean) + " f ffdfd " + Double.toString(sd));
+        return StatAnalyser.getSisgnificance(v, mean, sd);
     }
 
     public void updateTeamStats(FRC2019Team team) {
