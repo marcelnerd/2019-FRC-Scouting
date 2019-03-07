@@ -24,7 +24,7 @@ import java.util.HashMap;
 public class DBHelper extends SQLiteOpenHelper {
 
     private final static String SQL_CREATE_ENTRIES = "CREATE TABLE teams (_id INTEGER PRIMARY KEY, teleopPoints INT, autoPoints INT, autoRun FLOAT, vaultPoints INT, climb FLOAT, matchesPlayed INT);";
-    private final static String SQL_CREATE_ENTRIES_NEW = "CREATE TABLE teams (_id INTEGER PRIMARY KEY, teleopPoints FLOAT, autoPoints FLOAT, cargoPoints FLOAT, hatchPoints FLOAT, climbPoints FLOAT, matchesPlayed INT);";
+    private final static String SQL_CREATE_ENTRIES_NEW = "CREATE TABLE teams (_id INTEGER PRIMARY KEY, teleopPoints FLOAT, autoPoints FLOAT, cargoPoints FLOAT, hatchPoints FLOAT, lowClimb FLOAT, midClimb FLOAT, highClimb FLOAT, matchesPlayed INT);";
 
     private final static String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS teams";
     public final static String SQL_TABLE_NAME = "teams";
@@ -89,8 +89,6 @@ public class DBHelper extends SQLiteOpenHelper {
     public void updateTeamStats(FRC2019Team team) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        float oldTeleop, newTeleop, oldAutoP, newAutoP, oldCargo, newCargo, oldHatch, newHatch, matches;
-
         //double oldARun, newARun, oldClimb, newClimb;
 
         float teleop = team.teleopPoints;
@@ -98,8 +96,10 @@ public class DBHelper extends SQLiteOpenHelper {
         float autoPoints = team.autoPoints;
         float cargoPoints = team.cargoPoints;
         float hatchPoints = team.hatchPoints;
-        float climbPoints = team.climb;
-        matches = team.getMatchesPlayed();
+        float c1 = team.climb1;
+        float c2 = team.climb2;
+        float c3 = team.climb3;
+        float matches = team.getMatchesPlayed();
 
         Cursor cursor = db.rawQuery("SELECT * FROM " + SQL_TABLE_NAME + " WHERE _id=" + _id + ";", null);
 
@@ -112,7 +112,7 @@ public class DBHelper extends SQLiteOpenHelper {
             cursor.moveToLast();
 
             ////****UPDATE MATCHES PLAYED****////
-            matches = cursor.getInt(6);
+            matches = cursor.getInt(8);
             matches++;
             db.execSQL("UPDATE teams SET matchesPlayed=" + matches + " WHERE _id='" + _id + "';");
 
@@ -155,14 +155,14 @@ public class DBHelper extends SQLiteOpenHelper {
 //
         }
         else { //There is not yet an entry for this team, create an entry
-            db.execSQL("INSERT INTO " + SQL_TABLE_NAME + " VALUES (" + _id + ", " + teleop + ", " + autoPoints + ", " + cargoPoints + ", " + hatchPoints + ", " + climbPoints + ", " + matches + ");"); //MOST RECENTLELY CHANGED
+            db.execSQL("INSERT INTO " + SQL_TABLE_NAME + " VALUES (" + _id + ", " + teleop + ", " + autoPoints + ", " + cargoPoints + ", " + hatchPoints + ", " + c1 + ", " + c2 + ", " + c3 + ", " + matches + ");"); //MOST RECENTLELY CHANGED
             Log.v("minto", "INSERT ONE " + _id);
         }
 
         db.close();
     }
 
-    public void updateTeamStats(FRC2018Team team) {
+    public void updateTeamStats(FRC2018Team team) { //Old. For 2018 Teams
         SQLiteDatabase db = this.getWritableDatabase();
 
 

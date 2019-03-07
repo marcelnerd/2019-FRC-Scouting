@@ -57,7 +57,8 @@ public class TBAListener implements Response.Listener<JSONObject> {
 
         MainActivity.setCurrentMatch((MainActivity.getCurrentMatch() + 1));
         for (HashMap e : map) {
-            //Log.v("minto", e.toString());
+            Log.v("minto", e.toString());
+
             team = FRC2019Team.buildTeam(e.entrySet());
             //og.v("minto", "f");
             helper.updateTeamStats(team);

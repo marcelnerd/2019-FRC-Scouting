@@ -53,14 +53,21 @@ public class MatchUpdater {
             }
         }
 
-       /* // This section handles specific keys and information that is structurally different from the rest
+       // This section handles specific keys and information that is structurally different from the rest
         for(int x = 0; x < 3; x++) {
-            infoTable[x].put("endgameClimb", blueJSON.get("endgameRobot" + (x+1)).equals("Climbing"));
-            infoTable[x+3].put("endgameClimb", redJSON.get("endgameRobot" + (x+1)).equals("Climbing"));
-
-            infoTable[x].put("autoRun", blueJSON.get("autoRobot"+(x+1)).equals("AutoRun"));
-            infoTable[x+3].put("autoRun", redJSON.get("autoRobot"+(x+1)).equals("AutoRun"));
-        }*/
+            switch(x) {
+                case 1:
+                    infoTable[x].put("endgameRobot1", blueJSON.get("endgameRobot" + (x+1)));
+                    infoTable[x+3].put("endgameRobot1", redJSON.get("endgameRobot" + (x+1)));
+                    break;
+                case 2:
+                    infoTable[x].put("endgameRobot2", blueJSON.get("endgameRobot" + (x+1)));
+                    infoTable[x+3].put("endgameRobot2", redJSON.get("endgameRobot" + (x+1)));
+                case 3:
+                    infoTable[x].put("endgameRobot3", blueJSON.get("endgameRobot" + (x+1)));
+                    infoTable[x+3].put("endgameRobot3", redJSON.get("endgameRobot" + (x+1)));
+            }
+        }
 
       /* for(Object e: infoTable){
            Log.v("minto", e.toString());
