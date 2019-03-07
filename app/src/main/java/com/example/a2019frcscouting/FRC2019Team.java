@@ -19,8 +19,8 @@ public class FRC2019Team {
     public float climb2;
     public float climb3;
     public int matchesPlayed = 1;
-    public float[] scores;
-    public String[] scoreKeys = {"_id", "teleopPoints", "autoPoints", "cargoPoints", "hatchPoints", "lowClimb", "midClimb", "highClimb" };
+    public static float[] scores;
+    public static String[] scoreKeys = {"_id", "teleopPoints", "autoPoints", "cargoPoints", "hatchPoints", "lowClimb", "midClimb", "highClimb" };
 
 
     public FRC2019Team(int t, float ap, float tp, float hp, float cp, float c1, float c2, float c3) {

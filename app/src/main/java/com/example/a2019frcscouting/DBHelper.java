@@ -44,6 +44,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQL_CREATE_ENTRIES_NEW);
+        db.execSQL("INSERT INTO teams VALUES (-1, 0, 0, 0, 0, 0, 0, 0, 0)"); // Entry for mean of each value
+        db.execSQL("INSERT INTO teams VALUES (-2, 0, 0, 0, 0, 0, 0, 0, 0)"); // Entry for standard deviation of each value
 //        SQLiteDatabase d = this.getWritableDatabase();
     }
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -83,6 +85,30 @@ public class DBHelper extends SQLiteOpenHelper {
             }
         } catch (IOException e){
         } catch (SQLException e) {
+        }
+    }
+
+    public void doStatsStuff(String important) {
+        double[] stats;
+        ArrayList<Float> valueList = new ArrayList<>();
+        double[] doubleArray;
+        Cursor cursor;
+        SQLiteDatabase db = this.getWritableDatabase();
+        if(important.contentEquals("yeet")) {
+            for(int i = 0; i < FRC2019Team.scoreKeys.length; i++) {
+                cursor = db.rawQuery("SELECT " + FRC2019Team.scoreKeys[i] + " FROM " + SQL_TABLE_NAME + ";", null);
+                while(cursor.moveToNext()) {
+                    valueList.add(cursor.getFloat(i));
+                }
+
+                doubleArray = new double[valueList.size()];
+                for (int x = 0; x < valueList.size(); i++) {
+                    doubleArray[i] = valueList.get(i);
+                }
+                stats = StatAnalyser.getStats(doubleArray);
+                db.execSQL("UPDATE teams SET " + FRC2019Team.scoreKeys[i] + "=" + stats[0] + " WHERE _id=-1;"); //Update mean of value
+                db.execSQL("UPDATE teams SET " + FRC2019Team.scoreKeys[i] + "=" + stats[1] + " WHERE _id=-2;"); //Update standard deviation of value
+            }
         }
     }
 
