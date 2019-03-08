@@ -34,26 +34,34 @@ public class FrodoCursorAdapter extends CursorAdapter {
         TextView teamNumText = view.findViewById(R.id.TeamNumText);
         TextView statText = view.findViewById(R.id.statText);
 
-        teamNumText.setText(Integer.toString(cursor.getInt(0)));
+        if(cursor.getInt(0) == -1) {
+            teamNumText.setText("Mean of Stats");
+        }
+        else if(cursor.getInt(0) == -2) {
+            teamNumText.setText("Standard Deviation");
+        }
+        else {
+            teamNumText.setText(Integer.toString(cursor.getInt(0)));
 
-        switch(sortOption) {
-            case "teamNum":
-                statText.setText(Integer.toString(cursor.getInt(0)));
+            switch (sortOption) {
+                case "teamNum":
+                    statText.setText(Integer.toString(cursor.getInt(0)));
 
-            case "teleop":
-                statText.setText(Float.toString(cursor.getFloat(cursor.getColumnIndex("teleopPoints"))));
-                break;
-            case "auto":
-                statText.setText(Float.toString(cursor.getFloat(cursor.getColumnIndex("autoPoints"))));
-                break;
-            case "hatch":
-                statText.setText(Float.toString(cursor.getFloat(cursor.getColumnIndex("hatchPoints"))));
-                break;
-            case "cargo":
-                statText.setText(Float.toString(cursor.getFloat(cursor.getColumnIndex("cargoPoints"))));
-                break;
-            case "win":
-                statText.setText(Float.toString(cursor.getFloat(cursor.getColumnIndex("winRate"))));
+                case "teleop":
+                    statText.setText(Float.toString(cursor.getFloat(cursor.getColumnIndex("teleopPoints"))));
+                    break;
+                case "auto":
+                    statText.setText(Float.toString(cursor.getFloat(cursor.getColumnIndex("autoPoints"))));
+                    break;
+                case "hatch":
+                    statText.setText(Float.toString(cursor.getFloat(cursor.getColumnIndex("hatchPoints"))));
+                    break;
+                case "cargo":
+                    statText.setText(Float.toString(cursor.getFloat(cursor.getColumnIndex("cargoPoints"))));
+                    break;
+                case "win":
+                    statText.setText(Float.toString(cursor.getFloat(cursor.getColumnIndex("winRate"))));
+            }
         }
     }
 }
