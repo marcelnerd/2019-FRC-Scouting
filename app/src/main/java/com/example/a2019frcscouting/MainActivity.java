@@ -37,7 +37,7 @@ TODO // Replace for 2019 data //DONE
 TODO //
  */
 
-public class MainActivity extends FragmentActivity implements ListFragment.OnFragmentInteractionListener, SettingsFragment.OnFragmentInteractionListener, AdapterView.OnItemSelectedListener {
+public class MainActivity extends FragmentActivity implements AdapterView.OnItemSelectedListener {
     public static Context c; // Static context that can be accessed from other classes
     private static int currentMatch = 1;
     //public com.example.cameron.sql_testing.DatabaseContainer container = new DatabaseContainer(this);
@@ -51,44 +51,6 @@ public class MainActivity extends FragmentActivity implements ListFragment.OnFra
     public static RequestQueue queue;
     public static EditText searchText;
     public static Button searchButton;
-
-
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            Fragment fragment;
-            Intent intent;
-            FragmentTransaction transaction;
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-//                    fragment = new ListFragment();
-//                    transaction = getSupportFragmentManager().beginTransaction();
-//                    transaction.replace(R.id.listFrameLayout, fragment);
-//                    transaction.commit(); //TODO FUCK SHIT UP
-
-                    intent = getIntent();
-                    finish();
-                    startActivity(intent);
-
-                    //mTextMessage.setText(R.string.title_home);
-                    return true;
-                case R.id.navigation_dashboard:
-
-                    //mTextMessage.setText(R.string.title_dashboard);
-                    return true;
-                case R.id.navigation_notifications:
-                    fragment = new SettingsFragment();
-                    transaction = getSupportFragmentManager().beginTransaction();
-                    transaction.replace(R.id.settingsFrameLayout, fragment);
-                    transaction.commit();
-                    //mTextMessage.setText(R.string.title_notifications);
-                    return true;
-            }
-            return false;
-        }
-    };
 
     public static int getCurrentMatch() {
         return currentMatch;
@@ -137,8 +99,6 @@ public class MainActivity extends FragmentActivity implements ListFragment.OnFra
             }
         });
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         //sortSpinner = findViewById(R.id.sortSpinner);
         adap = ArrayAdapter.createFromResource(this, R.array.sort_array, android.R.layout.simple_spinner_item);
         adap.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
@@ -151,24 +111,27 @@ public class MainActivity extends FragmentActivity implements ListFragment.OnFra
                 FragmentTransaction transaction = manager.beginTransaction();
                 switch(position) {
                     case 0:
+                        todoAdapter = new FrodoCursorAdapter(MainActivity.c, helper.getAllEntriesTeamCursor(), "teamNum");
+                        MainActivity.list.setAdapter(todoAdapter);
+                    case 1:
                         //handler.getMatchData(String.format("/match/%1$s_qm%2$d", "2018mndu", currentMatch));
                         todoAdapter = new FrodoCursorAdapter(MainActivity.c, helper.getAllEntriesTeleopCursor(), "teleop");
                         MainActivity.list.setAdapter(todoAdapter);
                         //transaction.replace(R.id.listFrameLayout, new ListFragment());
                         //transaction.commit();
                         break;
-                    case 1:
+                    case 2:
                         todoAdapter = new FrodoCursorAdapter(MainActivity.c, helper.getAllEntriesAutoCursor(), "auto");
                         MainActivity.list.setAdapter(todoAdapter);
                         break;
-                    case 2:
+                    case 3:
                         todoAdapter = new FrodoCursorAdapter(MainActivity.c, helper.getAllEntriesHatchCursor(), "hatch");
                         MainActivity.list.setAdapter(todoAdapter);
                         break;
-                    case 3:
+                    case 4:
                         todoAdapter = new FrodoCursorAdapter(MainActivity.c, helper.getAllEntriesCargoCursor(), "cargo");
                         MainActivity.list.setAdapter(todoAdapter);
-                    case 4:
+                    case 5:
                         todoAdapter = new FrodoCursorAdapter(MainActivity.c, helper.getAllEntriesWinCursor(), "win");
                         MainActivity.list.setAdapter(todoAdapter);
                 }
@@ -200,16 +163,13 @@ public class MainActivity extends FragmentActivity implements ListFragment.OnFra
         });
 
         for (int i = 1; i < 82; i++) {
-            handler.getMatchData(String.format("/match/%1$s_qm%2$d", "2019caoc", i));
+            handler.getMatchData(String.format("/match/%1$s_qm%2$d", "2019mndu", i));
         }
 
         /*FrodoCursorAdapter todoAdapter = new FrodoCursorAdapter(MainActivity.c, helper.getAllEntriesTeleopCursor(), "teleop");
         MainActivity.list.setAdapter(todoAdapter);*/
 
     }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {}
 
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 

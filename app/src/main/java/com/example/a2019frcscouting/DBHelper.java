@@ -264,20 +264,4 @@ public class DBHelper extends SQLiteOpenHelper {
 
         return cursor;
     }
-
-    public ArrayList<FRC2018Team> getAllEntriesList() {
-        SQLiteDatabase db = this .getWritableDatabase();
-        ArrayList<FRC2018Team> list = new ArrayList<>();
-        Cursor cursor;
-        cursor = db.rawQuery("SELECT * FROM " + SQL_TABLE_NAME + ";", null);
-
-        while(cursor.moveToNext()) {
-            Log.v("minto", "Team ID: " + Integer.toString(cursor.getInt(0)) + "  Teleop: " + Integer.toString(cursor.getInt(1)) + "   Auto Points: " + cursor.getInt(2));
-            list.add(new FRC2018Team(false, cursor.getInt(2), false, cursor.getInt(0), cursor.getInt(1), 0));
-        }
-
-        cursor.close();
-        db.close();
-        return list;
-    }
 }
