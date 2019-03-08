@@ -38,50 +38,22 @@ public class FrodoCursorAdapter extends CursorAdapter {
 
         switch(sortOption) {
             case "teamNum":
-                statText.setText(cursor.getString(cursor.getColumnIndex("_id")).toString());
+                statText.setText(Integer.toString(cursor.getInt(0)));
 
             case "teleop":
-                statText.setText(cursor.getString(cursor.getColumnIndex("teleopPoints")).toString());
+                statText.setText(Float.toString(cursor.getFloat(cursor.getColumnIndex("teleopPoints"))));
                 break;
             case "auto":
-                statText.setText(cursor.getString(cursor.getColumnIndex("autoPoints")).toString());
+                statText.setText(Float.toString(cursor.getFloat(cursor.getColumnIndex("autoPoints"))));
                 break;
             case "hatch":
-                statText.setText(cursor.getString(cursor.getColumnIndex("hatchPoints")).toString());
+                statText.setText(Float.toString(cursor.getFloat(cursor.getColumnIndex("hatchPoints"))));
                 break;
             case "cargo":
-                statText.setText(cursor.getString(cursor.getColumnIndex("cargoPoints")).toString());
+                statText.setText(Float.toString(cursor.getFloat(cursor.getColumnIndex("cargoPoints"))));
                 break;
             case "win":
-                statText.setText(cursor.getString(cursor.getColumnIndex("winRate")).toString());
+                statText.setText(Float.toString(cursor.getFloat(cursor.getColumnIndex("winRate"))));
         }
-
-        /*telePointsText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainActivity.list.setAdapter(new FrodoCursorAdapter(MainActivity.c, TBAHandler.helper.getAllEntriesTeleopCursor(), sortOption));
-                Log.v("minto", "clicked thing");
-            }
-        });*/
-
-        /*
-        // Extract properties from cursor
-        String teamNum = cursor.getString(cursor.getColumnIndex("_id")).toString();
-        String teleopPoints = cursor.getString(cursor.getColumnIndex("teleopPoints")).toString();
-        String autoPoints = cursor.getString(cursor.getColumnIndex("autoPoints")).toString();
-        String vaultPoints = cursor.getString(cursor.getColumnIndex("vaultPoints")).toString();
-        String climb = new String((Double.parseDouble(cursor.getString(cursor.getColumnIndex("climb")))*100) + "%");
-        String autoRun = new String((Double.parseDouble(cursor.getString(cursor.getColumnIndex("autoRun")))*100) + "%");
-        String matchesPlayed = cursor.getString(cursor.getColumnIndex("matchesPlayed")).toString();
-
-        // Populate fields with extracted properties
-        teamNumText.setText(teamNum);
-        telePointsText.setText(teleopPoints);
-        autoPointsText.setText(autoPoints);
-        climbText.setText(climb);
-        vaultPointsText.setText(vaultPoints);
-        autoRunText.setText(autoRun);
-        matchesText.setText(matchesPlayed);
-        */
     }
 }

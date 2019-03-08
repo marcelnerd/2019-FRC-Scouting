@@ -29,10 +29,10 @@ public class TeamInfoActivity extends AppCompatActivity {
        // teamText.append(intent.getStringExtra("teamNum") + "; Signifgance: " + MainActivity.handler.helper.getSig(Float.parseFloat(intent.getStringExtra("teamNum")), "_id"));
 
         teamText.append(intent.getStringExtra("teamNum"));
-        teleopText.append(intent.getStringExtra("teleop") + "; Signifgance: " + MainActivity.handler.helper.getSig(Float.parseFloat(intent.getStringExtra("teleop")), "teleopPoints"));
-        autoText.append(intent.getStringExtra("autoPoints") + "; Signifgance: " + MainActivity.handler.helper.getSig(Float.parseFloat(intent.getStringExtra("autoPoints")), "autoPoints"));
-        hatchText.append(intent.getStringExtra("hatchPoints") + "; Signifgance: " + MainActivity.handler.helper.getSig(Float.parseFloat(intent.getStringExtra("hatchPoints")), "hatchPoints"));
-        cargoText.append(intent.getStringExtra("cargoPoints") + "; Signifgance: " + MainActivity.handler.helper.getSig(Float.parseFloat(intent.getStringExtra("cargoPoints")), "cargoPoints"));
-        winText.append(intent.getStringExtra("win") + "; Signifigance: " + MainActivity.handler.helper.getSig(Float.parseFloat(intent.getStringExtra("win")), "winRate"));
+        teleopText.append(intent.getStringExtra("teleop") + "; Significance: " + MainActivity.handler.helper.getSig(Float.parseFloat(intent.getStringExtra("teleop")), "teleopPoints"));
+        autoText.append(intent.getStringExtra("autoPoints") + "; Significance: " + MainActivity.handler.helper.getSig(Float.parseFloat(intent.getStringExtra("autoPoints")), "autoPoints"));
+        hatchText.append(intent.getStringExtra("hatchPoints") + "; Significance: " + MainActivity.handler.helper.getSig(Float.parseFloat(intent.getStringExtra("hatchPoints")), "hatchPoints"));
+        cargoText.append(intent.getStringExtra("cargoPoints") + "; Significance: " + MainActivity.handler.helper.getSig(Float.parseFloat(intent.getStringExtra("cargoPoints")), "cargoPoints"));
+        winText.append(intent.getStringExtra("win") + "; Significance: " + MainActivity.handler.helper.getSig(Float.parseFloat(intent.getStringExtra("win")), "winRate"));
     }
 }

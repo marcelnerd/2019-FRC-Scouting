@@ -109,38 +109,41 @@ public class MainActivity extends FragmentActivity implements AdapterView.OnItem
                 FrodoCursorAdapter todoAdapter;
                 FragmentManager manager = getSupportFragmentManager();
                 FragmentTransaction transaction = manager.beginTransaction();
-                switch(position) {
-                    case 0:
+                switch(parent.getSelectedItem().toString()) {
+                    case "Team Number":
                         todoAdapter = new FrodoCursorAdapter(MainActivity.c, helper.getAllEntriesTeamCursor(), "teamNum");
                         MainActivity.list.setAdapter(todoAdapter);
-                    case 1:
+                        break;
+                    case "Teleop Points":
                         //handler.getMatchData(String.format("/match/%1$s_qm%2$d", "2018mndu", currentMatch));
                         todoAdapter = new FrodoCursorAdapter(MainActivity.c, helper.getAllEntriesTeleopCursor(), "teleop");
                         MainActivity.list.setAdapter(todoAdapter);
                         //transaction.replace(R.id.listFrameLayout, new ListFragment());
                         //transaction.commit();
                         break;
-                    case 2:
+                    case "Autonomous Points":
                         todoAdapter = new FrodoCursorAdapter(MainActivity.c, helper.getAllEntriesAutoCursor(), "auto");
                         MainActivity.list.setAdapter(todoAdapter);
                         break;
-                    case 3:
+                    case "Hatch Points":
                         todoAdapter = new FrodoCursorAdapter(MainActivity.c, helper.getAllEntriesHatchCursor(), "hatch");
                         MainActivity.list.setAdapter(todoAdapter);
                         break;
-                    case 4:
+                    case "Cargo Points":
                         todoAdapter = new FrodoCursorAdapter(MainActivity.c, helper.getAllEntriesCargoCursor(), "cargo");
                         MainActivity.list.setAdapter(todoAdapter);
-                    case 5:
+                        break;
+                    case "Win Rate":
                         todoAdapter = new FrodoCursorAdapter(MainActivity.c, helper.getAllEntriesWinCursor(), "win");
                         MainActivity.list.setAdapter(todoAdapter);
+                        break;
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                FrodoCursorAdapter todoAdapter = new FrodoCursorAdapter(MainActivity.c, helper.getAllEntriesTeamCursor(), "team");
-                MainActivity.list.setAdapter(todoAdapter);
+//                FrodoCursorAdapter todoAdapter = new FrodoCursorAdapter(MainActivity.c, helper.getAllEntriesTeamCursor(), "teamNum");
+//                MainActivity.list.setAdapter(todoAdapter);
             }
         });
 
